@@ -565,11 +565,26 @@ buildTickerEco();buildTickerNews();
 
 async function checkVersion(){
   try{const r=await fetch('/version.txt?t='+Date.now(),{cache:'no-store'});const v=(await r.text()).trim();
-    if(v&&v!==VERSION){document.getElementById('toast').classList.add('show');setTimeout(async()=>{if('caches' in window){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)));}if('serviceWorker' in navigator){const reg=await navigator.serviceWorker.getRegistration();if(reg)await reg.update();}location.reload(true);},2000);}
+    if(v&&!v.includes("<")&&v!==VERSION){document.getElementById('toast').classList.add('show');setTimeout(async()=>{if('caches' in window){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)));}if('serviceWorker' in navigator){const reg=await navigator.serviceWorker.getRegistration();if(reg)await reg.update();}location.reload(true);},2000);}
   }catch(e){}
 }
 setInterval(checkVersion,30000);setTimeout(checkVersion,5000);
 if('serviceWorker' in navigator){window.addEventListener('load',async()=>{try{const reg=await navigator.serviceWorker.register('/sw.js');setInterval(()=>reg.update().catch(()=>{}),60000);}catch(e){}});}
+
+// Keep Screen Awake (Mencegah Layar Mati/Sleep)
+let wakeLock = null;
+async function requestWakeLock() {
+  try {
+    if ('wakeLock' in navigator) {
+      wakeLock = await navigator.wakeLock.request('screen');
+    }
+  } catch (err) {}
+}
+requestWakeLock();
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') requestWakeLock();
+});
+
 </script>
 </body>
 </html>
