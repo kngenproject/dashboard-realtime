@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#0a0f1e">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" type="image/png" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<title>Dashboard Realtime</title>
+<style>
+:root{
+  --bg-1:#0a0f1e;
+  --bg-2:#111827;
+  --surface:rgba(30,41,59,.55);
+  --surface-2:rgba(30,41,59,.75);
+  --border:rgba(148,163,184,.14);
+  --border-strong:rgba(148,163,184,.28);
+  --text-1:#f8fafc;
+  --text-2:#cbd5e1;
+  --text-3:#94a3b8;
+  --text-4:#64748b;
+  --accent:#38bdf8;
+  --accent-2:#0ea5e9;
+  --success:#22c55e;
+  --danger:#ef4444;
+  --warning:#f59e0b;
+  --purple:#a855f7;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,'Segoe UI',Roboto,'Helvetica Neue',sans-serif;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
+html,body{height:100%;overflow:hidden;overscroll-behavior:none}
+body{background:radial-gradient(1200px 600px at 50% -10%,#1e293b 0%,#0a0f1e 55%,#050810 100%);color:var(--text-1);display:flex;flex-direction:column;padding:6px;padding-top:calc(6px + env(safe-area-inset-top));padding-bottom:calc(6px + env(safe-area-inset-bottom));gap:5px;height:100dvh}
+
+/* HEADER */
+.header{display:flex;justify-content:space-between;align-items:center;flex-shrink:0;padding:4px 6px;height:24px}
+.brand{display:flex;align-items:center;gap:6px}
+.brand-logo{width:16px;height:16px;border-radius:4px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-size:9px;box-shadow:0 0 12px rgba(56,189,248,.4)}
+.brand-name{font-size:10px;font-weight:700;letter-spacing:.5px;color:var(--text-1)}
+.brand-ver{font-size:8px;color:var(--text-4);font-weight:500;letter-spacing:.3px}
+.header-right{display:flex;align-items:center;gap:4px}
+.chip{display:flex;align-items:center;gap:3px;padding:3px 7px;border-radius:20px;font-size:8px;font-weight:700;letter-spacing:.3px;border:1px solid transparent}
+.chip-live{background:rgba(220,38,38,.15);color:#fca5a5;border-color:rgba(220,38,38,.35)}
+.chip-refresh{background:rgba(8,145,178,.15);color:#7dd3fc;border-color:rgba(8,145,178,.35)}
+.live-dot{width:5px;height:5px;background:#ef4444;border-radius:50%;box-shadow:0 0 6px #ef4444;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.85)}}
+
+/* CARDS */
+.card{
+  background:var(--surface);
+  backdrop-filter:blur(20px) saturate(150%);
+  -webkit-backdrop-filter:blur(20px) saturate(150%);
+  border-radius:14px;
+  border:1px solid var(--border);
+  box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 4px 16px rgba(0,0,0,.25);
+  position:relative;
+  overflow:hidden;
+}
+
+/* HERO */
+.hero{display:flex;gap:5px;flex-shrink:0;height:112px}
+.hero-weather{flex:1;padding:10px 12px;display:flex;flex-direction:column;position:relative}
+.hero-weather::before{content:'';position:absolute;top:-40%;right:-20%;width:60%;height:120%;background:radial-gradient(circle,rgba(56,189,248,.18) 0%,transparent 70%);pointer-events:none}
+.hero-loc{display:flex;align-items:center;gap:4px;font-size:9px;color:var(--text-3);font-weight:500;margin-bottom:3px;position:relative;z-index:1}
+.hero-loc svg{width:10px;height:10px;fill:var(--accent);flex-shrink:0}
+.hero-loc span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hero-clock{font-size:34px;font-weight:800;color:var(--text-1);line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-1.5px;position:relative;z-index:1}
+.hero-date{font-size:9px;color:var(--text-4);margin-bottom:6px;letter-spacing:.2px;position:relative;z-index:1}
+.hero-weather-row{display:flex;align-items:center;justify-content:space-between;flex:1;position:relative;z-index:1}
+.hero-temp-block{}
+.hero-temp{font-size:36px;font-weight:800;color:var(--text-1);line-height:1;letter-spacing:-1px;display:flex;align-items:flex-start}
+.hero-temp-sup{font-size:14px;font-weight:600;color:var(--text-3);margin-top:2px;margin-left:1px}
+.hero-desc{font-size:10px;color:var(--text-2);margin-top:3px;font-weight:500}
+.hero-icon{font-size:44px;line-height:1;filter:drop-shadow(0 4px 12px rgba(56,189,248,.3))}
+.hero-sun{display:flex;gap:4px;margin-top:4px;font-size:8px;position:relative;z-index:1}
+.hero-sun-item{display:flex;align-items:center;gap:2px;background:rgba(15,23,42,.6);padding:2px 5px;border-radius:5px;color:var(--text-3);font-weight:600;border:1px solid rgba(148,163,184,.08)}
+
+.hero-side{width:100px;padding:8px 9px;display:flex;flex-direction:column;gap:5px;flex-shrink:0}
+.side-title{font-size:7px;color:var(--text-4);font-weight:700;text-transform:uppercase;letter-spacing:.6px;display:flex;align-items:center;gap:3px}
+.side-title::before{content:'';width:2px;height:6px;background:var(--accent);border-radius:2px}
+.side-row{display:flex;justify-content:space-between;align-items:center;font-size:8px;padding:1px 0}
+.side-row-label{color:var(--text-4);font-weight:500}
+.side-row-val{color:var(--text-1);font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.1px}
+
+/* PRAYER */
+.prayer-row{display:grid;grid-template-columns:repeat(6,1fr);gap:3px;flex-shrink:0}
+.prayer-card{padding:5px 3px;text-align:center;background:var(--surface);backdrop-filter:blur(20px);border-radius:10px;border:1px solid var(--border);position:relative;transition:all .25s ease}
+.prayer-name{font-size:6px;color:var(--text-4);font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
+.prayer-time{font-size:9px;color:var(--text-1);font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:.2px}
+.prayer-card.active{background:linear-gradient(135deg,rgba(56,189,248,.22),rgba(14,165,233,.12));border-color:rgba(56,189,248,.5);box-shadow:0 0 12px rgba(56,189,248,.25)}
+.prayer-card.active .prayer-time{color:var(--accent)}
+.prayer-card.active .prayer-name{color:var(--accent)}
+
+/* METRICS GRID */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;flex-shrink:0}
+.metric{padding:5px 7px;display:flex;flex-direction:column;gap:1px;position:relative;min-height:32px}
+.metric-label{font-size:6px;color:var(--text-4);text-transform:uppercase;letter-spacing:.4px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:2px}
+.metric-value{font-size:12px;font-weight:800;color:var(--text-1);line-height:1.05;white-space:nowrap;letter-spacing:-.2px;font-variant-numeric:tabular-nums}
+.metric-value small{font-size:7px;font-weight:600;color:var(--text-4);margin-left:1px;letter-spacing:0}
+.metric-sub{font-size:6px;color:var(--text-4);margin-top:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+
+/* AQI special */
+.aqi-card{grid-column:span 2;padding:5px 8px;position:relative}
+.aqi-value{font-size:15px;font-weight:800;color:var(--text-1);line-height:1;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
+.aqi-bar{height:3px;border-radius:2px;margin-top:3px;background:linear-gradient(90deg,#22c55e 0%,#84cc16 20%,#eab308 40%,#f97316 60%,#ef4444 80%,#a855f7 100%);position:relative}
+.aqi-marker{position:absolute;top:-2px;width:3px;height:7px;background:#fff;border-radius:1px;box-shadow:0 0 4px rgba(255,255,255,.8);transition:left .5s ease}
+
+/* CHART */
+.section{padding:6px 8px;flex-shrink:0}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.section-title{font-size:7px;color:var(--text-3);text-transform:uppercase;letter-spacing:.6px;font-weight:700;display:flex;align-items:center;gap:4px}
+.section-title::before{content:'';width:2px;height:7px;background:var(--accent);border-radius:2px}
+.section-badge{font-size:6px;color:var(--text-4);font-weight:600;background:rgba(15,23,42,.5);padding:1px 5px;border-radius:6px;border:1px solid var(--border)}
+.chart-wrap{width:100%;height:46px;background:rgba(15,23,42,.4);border-radius:9px;padding:3px;position:relative;overflow:hidden;border:1px solid rgba(148,163,184,.06)}
+.chart-svg{width:100%;height:100%;display:block}
+
+/* SCROLL */
+.scroll-x{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding:1px 0}
+.scroll-x::-webkit-scrollbar{display:none}
+.hour{flex:0 0 auto;min-width:38px;background:rgba(15,23,42,.5);border-radius:8px;padding:4px 3px;display:flex;flex-direction:column;align-items:center;gap:2px;border:1px solid rgba(148,163,184,.06);transition:all .2s}
+.hour-now{background:linear-gradient(135deg,rgba(56,189,248,.2),rgba(14,165,233,.08));border-color:rgba(56,189,248,.4)}
+.hour-time{font-size:7px;color:var(--text-4);font-weight:700;letter-spacing:.2px}
+.hour-now .hour-time{color:var(--accent)}
+.hour-icon{font-size:12px;line-height:1}
+.hour-temp{font-size:9px;font-weight:800;color:var(--text-1);letter-spacing:-.2px}
+.hour-rain{font-size:6px;color:#7dd3fc;font-weight:700}
+
+.day{flex:0 0 auto;min-width:46px;background:rgba(15,23,42,.5);border-radius:8px;padding:4px 3px;display:flex;flex-direction:column;align-items:center;gap:2px;border:1px solid rgba(148,163,184,.06)}
+.day-today{background:linear-gradient(135deg,rgba(56,189,248,.2),rgba(14,165,233,.08));border-color:rgba(56,189,248,.4)}
+.day-name{font-size:7px;color:var(--text-4);font-weight:700;text-transform:uppercase;letter-spacing:.3px}
+.day-today .day-name{color:var(--accent)}
+.day-icon{font-size:13px;line-height:1}
+.day-temp{font-size:7px;color:var(--text-4);font-weight:600;text-align:center;line-height:1.1}
+.day-temp b{color:var(--text-1);font-weight:800;font-size:8px}
+
+/* TICKER */
+.ticker-wrap{width:100%;flex-shrink:0;overflow:hidden;background:linear-gradient(90deg,rgba(15,23,42,.85),rgba(30,41,59,.6),rgba(15,23,42,.85));border:1px solid var(--border);border-radius:10px;padding:4px 0;position:relative;contain:content;backdrop-filter:blur(10px)}
+.ticker-wrap::before,.ticker-wrap::after{content:'';position:absolute;top:0;bottom:0;width:24px;z-index:2;pointer-events:none}
+.ticker-wrap::before{left:0;background:linear-gradient(90deg,#0a0f1e,transparent)}
+.ticker-wrap::after{right:0;background:linear-gradient(-90deg,#0a0f1e,transparent)}
+.ticker{display:flex;gap:22px;white-space:nowrap;padding-left:100%;will-change:transform}
+.tk-eco{animation:ticker-scroll 85s linear infinite}
+.tk-news{animation:ticker-scroll 130s linear infinite}
+@keyframes ticker-scroll{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
+.tk-item{display:flex;align-items:center;gap:4px;font-size:8px;font-weight:600}
+.tk-label{color:var(--text-4);font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.tk-val{color:var(--text-1);font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.1px}
+.tk-up{color:var(--success);font-weight:700}
+.tk-down{color:var(--danger);font-weight:700}
+.tk-flat{color:var(--text-3);font-weight:600}
+.tk-icon{font-size:9px}
+.tk-news-item{display:flex;align-items:center;gap:4px;font-size:8px;color:var(--text-2);font-weight:500}
+.tk-news-tag{background:linear-gradient(135deg,#0891b2,#0e7490);color:#fff;padding:1.5px 5px;border-radius:4px;font-size:6px;font-weight:800;letter-spacing:.4px;text-transform:uppercase}
+
+/* FOOTER */
+.footer{display:flex;justify-content:space-between;align-items:center;font-size:7px;color:var(--text-4);flex-shrink:0;padding:2px 6px;font-weight:500}
+.footer-status{display:flex;align-items:center;gap:3px}
+.status-dot{width:5px;height:5px;border-radius:50%;background:var(--success);box-shadow:0 0 4px var(--success);transition:all .3s}
+.status-dot.err{background:var(--danger);box-shadow:0 0 4px var(--danger)}
+.status-dot.loading{background:var(--warning);box-shadow:0 0 4px var(--warning);animation:pulse 1s infinite}
+
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(120px);background:linear-gradient(135deg,#0891b2,#0e7490);color:#fff;padding:10px 18px;border-radius:12px;font-size:11px;font-weight:600;box-shadow:0 12px 32px rgba(8,145,178,.5);transition:transform .4s cubic-bezier(.34,1.56,.64,1);z-index:99;display:flex;align-items:center;gap:6px}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+.err{color:var(--danger);font-size:8px;text-align:center;padding:4px}
+.load{color:var(--text-4);font-size:8px;text-align:center;padding:6px;font-weight:500}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="brand">
+    <div class="brand-logo">📡</div>
+    <div>
+      <div class="brand-name">REALTIME MONITOR</div>
+      <div class="brand-ver" id="ver">v6.0.0</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="chip chip-refresh" id="countdown">⟳ 5:00</div>
+    <div class="chip chip-live"><span class="live-dot"></span>LIVE</div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="card hero-weather">
+    <div class="hero-loc">
+      <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+      <span id="loc">Mendeteksi lokasi...</span>
+    </div>
+    <div class="hero-clock" id="clock">--:--:--</div>
+    <div class="hero-date" id="date">Memuat tanggal...</div>
+    <div class="hero-weather-row">
+      <div class="hero-temp-block">
+        <div class="hero-temp"><span id="temp">--</span><span class="hero-temp-sup">°C</span></div>
+        <div class="hero-desc" id="desc">Memuat cuaca...</div>
+      </div>
+      <div class="hero-icon" id="wicon">⏳</div>
+    </div>
+    <div class="hero-sun">
+      <div class="hero-sun-item" id="sunrise">🌅 --:--</div>
+      <div class="hero-sun-item" id="sunset">🌇 --:--</div>
+      <div class="hero-sun-item" id="daylen">☀️ --j --m</div>
+    </div>
+  </div>
+  <div class="card hero-side">
+    <div class="side-title">Kalender</div>
+    <div class="side-row"><span class="side-row-label">Jawa</span><span class="side-row-val" id="calJawa">--</span></div>
+    <div class="side-row"><span class="side-row-label">Hijriah</span><span class="side-row-val" id="calHijri">--</span></div>
+    <div class="side-row"><span class="side-row-label">Weton</span><span class="side-row-val" id="calWeton">--</span></div>
+    <div class="side-row"><span class="side-row-label">Neptu</span><span class="side-row-val" id="calNeptu">--</span></div>
+  </div>
+</div>
+
+<!-- PRAYER -->
+<div class="prayer-row">
+  <div class="prayer-card"><div class="prayer-name">Imsak</div><div class="prayer-time" id="pImsak">--:--</div></div>
+  <div class="prayer-card"><div class="prayer-name">Subuh</div><div class="prayer-time" id="pSubuh">--:--</div></div>
+  <div class="prayer-card"><div class="prayer-name">Dzuhur</div><div class="prayer-time" id="pDzuhur">--:--</div></div>
+  <div class="prayer-card"><div class="prayer-name">Ashar</div><div class="prayer-time" id="pAshar">--:--</div></div>
+  <div class="prayer-card"><div class="prayer-name">Maghrib</div><div class="prayer-time" id="pMaghrib">--:--</div></div>
+  <div class="prayer-card"><div class="prayer-name">Isya</div><div class="prayer-time" id="pIsya">--:--</div></div>
+</div>
+
+<!-- WEATHER METRICS -->
+<div class="grid3">
+  <div class="card metric"><div class="metric-label">💧 Lembab</div><div class="metric-value" id="hum">--<small>%</small></div></div>
+  <div class="card metric"><div class="metric-label">💨 Angin</div><div class="metric-value" id="wind">--<small>km/j</small></div><div class="metric-sub" id="winddir">--</div></div>
+  <div class="card metric"><div class="metric-label">🌬️ Hembus</div><div class="metric-value" id="gust">--<small>km/j</small></div></div>
+  <div class="card metric"><div class="metric-label">🌧️ Hujan</div><div class="metric-value" id="precip">--<small>mm</small></div></div>
+  <div class="card metric"><div class="metric-label">🧭 Tekanan</div><div class="metric-value" id="press">--<small>hPa</small></div></div>
+  <div class="card metric"><div class="metric-label">🌡️ Terasa</div><div class="metric-value" id="feels">--<small>°C</small></div></div>
+  <div class="card metric"><div class="metric-label">💦 Embun</div><div class="metric-value" id="dew">--<small>°C</small></div></div>
+  <div class="card metric"><div class="metric-label">👁️ Pandang</div><div class="metric-value" id="vis">--<small>km</small></div></div>
+  <div class="card metric"><div class="metric-label">🔆 UV Index</div><div class="metric-value" id="uv">--</div><div class="metric-sub" id="uvdesc">--</div></div>
+</div>
+
+<!-- AQI -->
+<div class="grid3">
+  <div class="card metric aqi-card">
+    <div class="metric-label">🇪🇺 AQI Eropa</div>
+    <div class="aqi-value" id="aqi">--</div>
+    <div class="aqi-bar"><div class="aqi-marker" id="aqiMarker" style="left:0%"></div></div>
+    <div class="metric-sub" id="aqidesc">--</div>
+  </div>
+  <div class="card metric"><div class="metric-label">PM2.5</div><div class="metric-value" id="pm25">--<small>µg</small></div></div>
+  <div class="card metric"><div class="metric-label">PM10</div><div class="metric-value" id="pm10">--<small>µg</small></div></div>
+  <div class="card metric"><div class="metric-label">O₃</div><div class="metric-value" id="o3">--<small>µg</small></div></div>
+  <div class="card metric"><div class="metric-label">NO₂</div><div class="metric-value" id="no2">--<small>µg</small></div></div>
+  <div class="card metric"><div class="metric-label">SO₂</div><div class="metric-value" id="so2">--<small>µg</small></div></div>
+  <div class="card metric"><div class="metric-label">CO</div><div class="metric-value" id="co">--<small>µg</small></div></div>
+</div>
+
+<!-- CHART -->
+<div class="card section">
+  <div class="section-head">
+    <div class="section-title">Grafik Suhu 24 Jam</div>
+    <div class="section-badge" id="chartRange">--</div>
+  </div>
+  <div class="chart-wrap"><svg class="chart-svg" id="tempChart" viewBox="0 0 300 42" preserveAspectRatio="none"></svg></div>
+</div>
+
+<!-- HOURLY -->
+<div class="card section">
+  <div class="section-head">
+    <div class="section-title">Prakiraan Per Jam</div>
+    <div class="section-badge">24 jam ke depan</div>
+  </div>
+  <div class="scroll-x" id="hourly"><div class="load">Memuat...</div></div>
+</div>
+
+<!-- DAILY -->
+<div class="card section">
+  <div class="section-head">
+    <div class="section-title">Prakiraan 7 Hari</div>
+    <div class="section-badge">Mingguan</div>
+  </div>
+  <div class="scroll-x" id="daily"><div class="load">Memuat...</div></div>
+</div>
+
+<!-- TICKERS -->
+<div class="ticker-wrap"><div class="ticker tk-eco" id="tickerEco"></div></div>
+<div class="ticker-wrap"><div class="ticker tk-news" id="tickerNews"></div></div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-status">
+    <span class="status-dot" id="statusDot"></span>
+    <span id="status">Memuat...</span>
+  </div>
+  <span id="upd">--</span>
+</div>
+
+<div class="toast" id="toast">🔄 Versi baru, memuat ulang...</div>
+
+<script>
+const VERSION='6.0.0';
+const W_API='https://api.open-meteo.com/v1/forecast';
+const AQ_API='https://air-quality-api.open-meteo.com/v1/air-quality';
+const GEO_API='https://nominatim.openstreetmap.org/reverse';
+const REFRESH_SEC=300;
+const FALLBACK={lat:-6.2088,lon:106.8456};
+
+document.getElementById('ver').textContent='v'+VERSION;
+
+function tick(){
+  const n=new Date();
+  document.getElementById('clock').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')+':'+String(n.getSeconds()).padStart(2,'0');
+  const d=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  const m=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  document.getElementById('date').textContent=d[n.getDay()]+', '+n.getDate()+' '+m[n.getMonth()]+' '+n.getFullYear();
+}
+setInterval(tick,1000);tick();
+
+const WMO={0:['Cerah','☀️'],1:['Sebagian Cerah','🌤️'],2:['Berawan','⛅'],3:['Mendung','☁️'],45:['Berkabut','🌫️'],48:['Kabut Beku','🌫️'],51:['Gerimis Ringan','🌦️'],53:['Gerimis Sedang','🌦️'],55:['Gerimis Lebat','🌧️'],61:['Hujan Ringan','🌧️'],63:['Hujan Sedang','🌧️'],65:['Hujan Lebat','🌧️'],71:['Salju Ringan','🌨️'],73:['Salju Sedang','🌨️'],75:['Salju Lebat','❄️'],80:['Hujan Lokal','🌦️'],81:['Hujan Deras','🌧️'],82:['Hujan Sangat Deras','⛈️'],95:['Badai Petir','⛈️'],96:['Badai Petir + Es','⛈️'],99:['Badai Petir Hebat','🌩️']};
+const wi=c=>WMO[c]||['Tidak Diketahui','❓'];
+function uvInfo(u){if(u==null)return['--','--'];if(u<3)return[u.toFixed(1),'Rendah'];if(u<6)return[u.toFixed(1),'Sedang'];if(u<8)return[u.toFixed(1),'Tinggi'];if(u<11)return[u.toFixed(1),'Sangat Tinggi'];return[u.toFixed(1),'Ekstrem'];}
+function windDir(deg){if(deg==null)return'--';const d=['U','TL','T','TG','S','BD','B','BL'];return d[Math.round(deg/45)%8]+' '+Math.round(deg)+'°';}
+function aqiInfo(a){if(a==null)return['--','--',0];if(a<=20)return[a,'Baik',(a/20)*12];if(a<=40)return[a,'Cukup',12+((a-20)/20)*12];if(a<=60)return[a,'Sedang',24+((a-40)/20)*20];if(a<=80)return[a,'Buruk',44+((a-60)/20)*20];if(a<=100)return[a,'Sangat Buruk',64+((a-80)/20)*20];return[a,'Berbahaya',84+Math.min((a-100)/100,1)*16];}
+
+function fetchT(url,ms){
+  const ctl=new AbortController();
+  const to=setTimeout(()=>ctl.abort(),ms);
+  return fetch(url,{signal:ctl.signal}).finally(()=>clearTimeout(to));
+}
+function getLoc(){
+  return new Promise(res=>{
+    if(!navigator.geolocation)return res(FALLBACK);
+    navigator.geolocation.getCurrentPosition(
+      p=>res({lat:p.coords.latitude,lon:p.coords.longitude}),
+      ()=>res(FALLBACK),
+      {enableHighAccuracy:false,timeout:7000,maximumAge:600000}
+    );
+  });
+}
+async function locName(lat,lon){
+  try{
+    const r=await fetchT(GEO_API+'?lat='+lat+'&lon='+lon+'&format=json&accept-language=id',3500);
+    const j=await r.json(),a=j.address||{};
+    const c=a.city||a.town||a.village||a.municipality||a.county||'';
+    return c?(c+', '+(a.state||'')):lat.toFixed(3)+', '+lon.toFixed(3);
+  }catch{return lat.toFixed(3)+', '+lon.toFixed(3)}
+}
+async function getWeather(lat,lon){
+  const p=new URLSearchParams({latitude:lat,longitude:lon,current:'temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,pressure_msl,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m,dew_point_2m,visibility,uv_index',hourly:'temperature_2m,weather_code,precipitation_probability,is_day,uv_index',daily:'weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,daylight_duration,uv_index_max,precipitation_probability_max',timezone:'auto',forecast_days:7,forecast_hours:24});
+  const r=await fetchT(W_API+'?'+p,8000);
+  if(!r.ok)throw new Error('Gagal cuaca');
+  return r.json();
+}
+async function getAQ(lat,lon){
+  const p=new URLSearchParams({latitude:lat,longitude:lon,current:'european_aqi,pm10,pm2_5,carbon_monoxide,nitrogen_dioxide,sulphur_dioxide,ozone',timezone:'auto'});
+  const r=await fetchT(AQ_API+'?'+p,8000);
+  if(!r.ok)throw new Error('Gagal AQ');
+  return r.json();
+}
+
+function renderCur(d){
+  const c=d.current,w=wi(c.weather_code);
+  document.getElementById('temp').textContent=Math.round(c.temperature_2m);
+  document.getElementById('desc').textContent=w[0];
+  document.getElementById('wicon').textContent=w[1];
+  document.getElementById('hum').innerHTML=c.relative_humidity_2m+'<small>%</small>';
+  document.getElementById('wind').innerHTML=c.wind_speed_10m.toFixed(1)+'<small>km/j</small>';
+  document.getElementById('winddir').textContent=windDir(c.wind_direction_10m);
+  document.getElementById('gust').innerHTML=(c.wind_gusts_10m||0).toFixed(1)+'<small>km/j</small>';
+  document.getElementById('precip').innerHTML=(c.precipitation||0).toFixed(1)+'<small>mm</small>';
+  document.getElementById('press').innerHTML=Math.round(c.pressure_msl||c.surface_pressure||0)+'<small>hPa</small>';
+  document.getElementById('feels').innerHTML=Math.round(c.apparent_temperature)+'<small>°C</small>';
+  document.getElementById('dew').innerHTML=(c.dew_point_2m!=null?c.dew_point_2m.toFixed(1):'--')+'<small>°C</small>';
+  document.getElementById('vis').innerHTML=(c.visibility!=null?(c.visibility/1000).toFixed(1):'--')+'<small>km</small>';
+  const[u,ud]=uvInfo(c.uv_index);
+  document.getElementById('uv').textContent=u;
+  document.getElementById('uvdesc').textContent=ud;
+  const sr=new Date(d.daily.sunrise[0]),ss=new Date(d.daily.sunset[0]);
+  const fmt=t=>String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');
+  document.getElementById('sunrise').textContent='🌅 '+fmt(sr);
+  document.getElementById('sunset').textContent='🌇 '+fmt(ss);
+  const dl=(d.daily.daylight_duration[0]||0)/3600;
+  document.getElementById('daylen').textContent='☀️ '+Math.floor(dl)+'j '+Math.round((dl%1)*60)+'m';
+}
+function renderAQ(d){
+  const c=d.current;
+  const[a,ad,pos]=aqiInfo(c.european_aqi);
+  document.getElementById('aqi').textContent=a;
+  document.getElementById('aqidesc').textContent=ad;
+  document.getElementById('aqiMarker').style.left=Math.min(98,pos)+'%';
+  document.getElementById('pm25').innerHTML=(c.pm2_5!=null?c.pm2_5.toFixed(1):'--')+'<small>µg</small>';
+  document.getElementById('pm10').innerHTML=(c.pm10!=null?c.pm10.toFixed(1):'--')+'<small>µg</small>';
+  document.getElementById('o3').innerHTML=(c.ozone!=null?c.ozone.toFixed(0):'--')+'<small>µg</small>';
+  document.getElementById('no2').innerHTML=(c.nitrogen_dioxide!=null?c.nitrogen_dioxide.toFixed(1):'--')+'<small>µg</small>';
+  document.getElementById('so2').innerHTML=(c.sulphur_dioxide!=null?c.sulphur_dioxide.toFixed(1):'--')+'<small>µg</small>';
+  document.getElementById('co').innerHTML=(c.carbon_monoxide!=null?c.carbon_monoxide.toFixed(0):'--')+'<small>µg</small>';
+}
+function renderHourly(d){
+  const h=d.hourly,now=Date.now();
+  let html='',count=0,firstIdx=-1;
+  for(let i=0;i<h.time.length;i++){if(new Date(h.time[i]).getTime()>=now-3600000){firstIdx=i;break;}}
+  for(let i=firstIdx;i<h.time.length&&count<24;i++){
+    const dt=new Date(h.time[i]),w=wi(h.weather_code[i]),rain=h.precipitation_probability[i]||0;
+    const nowCls=count===0?' hour-now':'';
+    html+='<div class="hour'+nowCls+'"><div class="hour-time">'+String(dt.getHours()).padStart(2,'0')+':00</div><div class="hour-icon">'+w[1]+'</div><div class="hour-temp">'+Math.round(h.temperature_2m[i])+'°</div>'+(rain>0?'<div class="hour-rain">💧'+rain+'%</div>':'<div class="hour-rain">—</div>')+'</div>';
+    count++;
+  }
+  document.getElementById('hourly').innerHTML=html||'<div class="load">Tidak ada data</div>';
+}
+function renderDaily(d){
+  const day=['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
+  let html='';
+  for(let i=0;i<d.daily.time.length;i++){
+    const dt=new Date(d.daily.time[i]);
+    const lbl=i===0?'Ini':day[dt.getDay()];
+    const w=wi(d.daily.weather_code[i]);
+    const rain=d.daily.precipitation_probability_max[i]||0;
+    const nowCls=i===0?' day-today':'';
+    html+='<div class="day'+nowCls+'"><div class="day-name">'+lbl+'</div><div class="day-icon">'+w[1]+'</div><div class="day-temp"><b>'+Math.round(d.daily.temperature_2m_max[i])+'°</b> '+Math.round(d.daily.temperature_2m_min[i])+'°</div>'+(rain>0?'<div class="hour-rain">💧'+rain+'%</div>':'')+'</div>';
+  }
+  document.getElementById('daily').innerHTML=html;
+}
+function renderTempChart(d){
+  const h=d.hourly;const now=Date.now();const pts=[];let fi=-1;
+  for(let i=0;i<h.time.length;i++){if(new Date(h.time[i]).getTime()>=now-3600000){fi=i;break;}}
+  for(let i=fi;i<h.time.length&&pts.length<24;i++)pts.push(h.temperature_2m[i]);
+  if(pts.length<2)return;
+  const min=Math.min(...pts),max=Math.max(...pts),range=max-min||1;
+  const w=300,hgt=42,pad=4;
+  let path='',area='';
+  pts.forEach((v,i)=>{const x=(i/(pts.length-1))*w;const y=pad+(1-(v-min)/range)*(hgt-pad*2);path+=(i===0?'M':'L')+x.toFixed(1)+','+y.toFixed(1);});
+  area=path+'L'+w+','+hgt+'L0,'+hgt+'Z';
+  const svg=document.getElementById('tempChart');
+  svg.innerHTML='<defs>'
+    +'<linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#38bdf8" stop-opacity="0.55"/><stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/></linearGradient>'
+    +'<linearGradient id="g2" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#a855f7"/></linearGradient>'
+    +'</defs>'
+    +'<path d="'+area+'" fill="url(#g1)"/>'
+    +'<path d="'+path+'" fill="none" stroke="url(#g2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>'
+    +'<text x="3" y="9" fill="#64748b" font-size="6" font-weight="700">'+Math.round(max)+'°</text>'
+    +'<text x="3" y="'+(hgt-2)+'" fill="#64748b" font-size="6" font-weight="700">'+Math.round(min)+'°</text>';
+  document.getElementById('chartRange').textContent=Math.round(min)+'° — '+Math.round(max)+'°';
+}
+
+function setStatus(s,type){document.getElementById('status').textContent=s;const d=document.getElementById('statusDot');d.className='status-dot'+(type?' '+type:'');}
+function setUpdated(){const n=new Date();document.getElementById('upd').textContent='Update: '+String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')+':'+String(n.getSeconds()).padStart(2,'0');}
+let countdownSec=REFRESH_SEC;
+function tickCountdown(){countdownSec--;if(countdownSec<=0)countdownSec=REFRESH_SEC;const m=Math.floor(countdownSec/60),s=countdownSec%60;document.getElementById('countdown').textContent='⟳ '+m+':'+String(s).padStart(2,'0');}
+setInterval(tickCountdown,1000);
+
+let coords=null;
+async function refresh(){
+  if(!coords)return;
+  try{
+    setStatus('Memuat data...','loading');
+    const[w,aq]=await Promise.all([getWeather(coords.lat,coords.lon),getAQ(coords.lat,coords.lon)]);
+    renderCur(w);renderHourly(w);renderDaily(w);renderAQ(aq);renderTempChart(w);
+    setUpdated();setStatus('Terhubung','');countdownSec=REFRESH_SEC;
+  }catch(e){setStatus('Gagal memuat','err');}
+}
+async function init(){
+  try{
+    coords=await getLoc();
+    document.getElementById('loc').textContent=coords.lat.toFixed(3)+', '+coords.lon.toFixed(3);
+    await refresh();
+    locName(coords.lat,coords.lon).then(n=>{document.getElementById('loc').textContent=n;});
+    setInterval(refresh,REFRESH_SEC*1000);
+  }catch(e){
+    document.getElementById('loc').textContent='Lokasi tidak tersedia';
+    document.getElementById('desc').textContent=e.message;
+    document.getElementById('wicon').textContent='⚠️';
+    setStatus('Error','err');
+  }
+}
+init();
+
+const PRAYER_TIMES={imsak:'04:09',subuh:'04:19',dzuhur:'11:44',ashar:'14:45',maghrib:'17:49',isya:'18:58'};
+function renderPrayer(){
+  ['pImsak','pSubuh','pDzuhur','pAshar','pMaghrib','pIsya'].forEach((id,i)=>{
+    document.getElementById(id).textContent=Object.values(PRAYER_TIMES)[i];
+  });
+}
+renderPrayer();
+function updatePrayerActive(){
+  const now=new Date();const cur=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+  const map={pImsak:PRAYER_TIMES.imsak,pSubuh:PRAYER_TIMES.subuh,pDzuhur:PRAYER_TIMES.dzuhur,pAshar:PRAYER_TIMES.ashar,pMaghrib:PRAYER_TIMES.maghrib,pIsya:PRAYER_TIMES.isya};
+  let active=null;for(const[k,v]of Object.entries(map)){if(cur>=v)active=k;}
+  ['pImsak','pSubuh','pDzuhur','pAshar','pMaghrib','pIsya'].forEach(id=>{const el=document.getElementById(id);if(el)el.parentElement.classList.toggle('active',id===active);});
+}
+setTimeout(updatePrayerActive,500);
+setInterval(updatePrayerActive,60000);
+
+function renderCalendar(){
+  const now=new Date();const dayIdx=now.getDay();
+  const pasaran=['Legi','Pahing','Pon','Wage','Kliwon'];
+  const wetonNames=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  const base=new Date(2026,9,1);const basePas=0;
+  const diff=Math.floor((now-base)/86400000);
+  const pasIdx=((basePas+diff)%5+5)%5;
+  const weton=wetonNames[dayIdx]+' '+pasaran[pasIdx];
+  const neptuMap={Minggu:5,Senin:4,Selasa:3,Rabu:7,Kamis:8,Jumat:6,Sabtu:9};
+  const pasMap={Legi:5,Pahing:9,Pon:7,Wage:4,Kliwon:8};
+  const neptu=neptuMap[wetonNames[dayIdx]]+pasMap[pasaran[pasIdx]];
+  document.getElementById('calJawa').textContent='Bakda Mulud';
+  document.getElementById('calHijri').textContent=(now.getDate()+18)+' Rab.Akhir';
+  document.getElementById('calWeton').textContent=weton;
+  document.getElementById('calNeptu').textContent=neptu;
+}
+renderCalendar();
+
+const ECON_DATA=[
+  {icon:'💵',label:'USD/IDR',val:'Rp17.887',chg:'+0,07%',trend:'up'},
+  {icon:'🛢️',label:'Pertalite',val:'Rp10.000/L',chg:'Stabil',trend:'flat'},
+  {icon:'⛽',label:'Pertamax',val:'Rp15.950/L',chg:'Stabil',trend:'flat'},
+  {icon:'🚛',label:'Solar',val:'Rp6.800/L',chg:'Subsidi',trend:'flat'},
+  {icon:'📈',label:'IHSG',val:'6.146,72',chg:'-0,75%',trend:'down'},
+  {icon:'🏦',label:'BI Rate',val:'5,75%',chg:'Ditahan',trend:'flat'},
+  {icon:'🥇',label:'Emas Antam',val:'Rp2.619.000/g',chg:'+10.000',trend:'up'},
+  {icon:'₿',label:'Bitcoin',val:'US$83.392',chg:'-2,60%',trend:'down'},
+  {icon:'⟠',label:'Ethereum',val:'US$2.569',chg:'-4,55%',trend:'down'},
+  {icon:'🛢️',label:'Pertamina Dex',val:'Rp25.200/L',chg:'Stabil',trend:'flat'},
+  {icon:'⚡',label:'Pertamax Turbo',val:'Rp19.600/L',chg:'Stabil',trend:'flat'},
+  {icon:'🔋',label:'Pertamax Green',val:'Rp19.150/L',chg:'Stabil',trend:'flat'},
+  {icon:'🪙',label:'Emas UBS',val:'Rp2.539.000/g',chg:'Stabil',trend:'flat'},
+  {icon:'💰',label:'Emas Galeri24',val:'Rp2.516.000/g',chg:'Stabil',trend:'flat'},
+  {icon:'🌾',label:'Beras Bawah I',val:'Rp15.150/kg',chg:'+1,68%',trend:'up'},
+  {icon:'🍚',label:'Beras Bawah II',val:'Rp14.950/kg',chg:'+0,34%',trend:'up'},
+  {icon:'🥚',label:'Telur Ayam',val:'Rp28.300/kg',chg:'-0,50%',trend:'down'},
+  {icon:'🌶️',label:'Cabai Rawit',val:'Rp98.600/kg',chg:'+5,2%',trend:'up'},
+  {icon:'🍬',label:'Gula Premium',val:'Rp20.500/kg',chg:'+0,26%',trend:'up'},
+  {icon:'🍶',label:'Minyak Curah',val:'Rp20.850/L',chg:'+1,2%',trend:'up'},
+  {icon:'🫘',label:'Daging Sapi',val:'Rp135.000/kg',chg:'Stabil',trend:'flat'}
+];
+
+const NEWS_DATA=[
+  {tag:'EKONOMI',text:'Luhut yakinkan investor: Indonesia tidak akan kolaps di tengah ketidakpastian global'},
+  {tag:'BANK',text:'BI Rate ditahan di 5,75% untuk menjaga stabilitas rupiah'},
+  {tag:'PASAR',text:'IHSG rawan koreksi ke level 6.134, investor cermati sentimen eksternal'},
+  {tag:'PANGAN',text:'Harga cabai rawit naik tembus Rp98.600/kg, telur ayam turun'},
+  {tag:'TEKNOLOGI',text:'Pemerintah dorong AI untuk hilirisasi industri nasional'},
+  {tag:'DUNIA',text:'World Bank proyeksi ekonomi RI tumbuh 5,2% di 2026'},
+  {tag:'ENERGI',text:'Moratorium smelter nikel setengah jadi dibahas pemerintah'},
+  {tag:'PASAR',text:'OJK catat pembiayaan UMKM capai Rp1.949 triliun per Juli 2026'},
+  {tag:'MONETER',text:'Rupiah diproyeksi fluktuatif di rentang Rp17.830-Rp17.960/US$'},
+  {tag:'TEKNOLOGI',text:'Startup AI Indonesia Dokai diakuisisi perusahaan AS StackBlitz'},
+  {tag:'DUNIA',text:'Pasar kripto lesu: Bitcoin turun ke US$83.392, Ethereum US$2.569'},
+  {tag:'EKONOMI',text:'Industri pengolahan nonmigas tumbuh 5,32%, kontribusi 16% ke PDB'}
+];
+
+function buildTickerEco(){
+  const el=document.getElementById('tickerEco');if(!el)return;
+  const arrow=t=>t==='up'?'▲':t==='down'?'▼':'●';
+  const cls=t=>t==='up'?'tk-up':t==='down'?'tk-down':'tk-flat';
+  let html='';
+  for(let r=0;r<2;r++){ECON_DATA.forEach(d=>{html+='<div class="tk-item"><span class="tk-icon">'+d.icon+'</span><span class="tk-label">'+d.label+'</span><span class="tk-val">'+d.val+'</span><span class="'+cls(d.trend)+'">'+arrow(d.trend)+' '+d.chg+'</span></div>';});}
+  el.innerHTML=html;
+}
+function buildTickerNews(){
+  const el=document.getElementById('tickerNews');if(!el)return;
+  let html='';
+  for(let r=0;r<2;r++){NEWS_DATA.forEach(n=>{html+='<div class="tk-news-item"><span class="tk-news-tag">'+n.tag+'</span><span>'+n.text+'</span></div>';});}
+  el.innerHTML=html;
+}
+buildTickerEco();buildTickerNews();
+
+async function checkVersion(){
+  try{const r=await fetch('/version.txt?t='+Date.now(),{cache:'no-store'});const v=(await r.text()).trim();
+    if(v&&v!==VERSION){document.getElementById('toast').classList.add('show');setTimeout(async()=>{if('caches' in window){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)));}if('serviceWorker' in navigator){const reg=await navigator.serviceWorker.getRegistration();if(reg)await reg.update();}location.reload(true);},2000);}
+  }catch(e){}
+}
+setInterval(checkVersion,30000);setTimeout(checkVersion,5000);
+if('serviceWorker' in navigator){window.addEventListener('load',async()=>{try{const reg=await navigator.serviceWorker.register('/sw.js');setInterval(()=>reg.update().catch(()=>{}),60000);}catch(e){}});}
+</script>
+</body>
+</html>
