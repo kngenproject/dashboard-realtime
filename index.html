@@ -27,108 +27,127 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;width:100%;overflow:hidden;touch-action:none}
-body{background:var(--bg-1);color:var(--text-1);display:flex;flex-direction:column;padding:4px;gap:4px}
+body{background:var(--bg-1);color:var(--text-1);display:flex;flex-direction:column;padding:6px;gap:6px}
 
 /* HEADER */
-.header{display:flex;justify-content:space-between;align-items:center;height:22px;flex-shrink:0}
-.brand{display:flex;align-items:center;gap:4px}
-.brand-logo{width:16px;height:16px;border-radius:4px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:9px}
-.brand-name{font-size:10px;font-weight:700;color:var(--text-1)}
-.brand-ver{font-size:8px;color:var(--text-4)}
-.header-right{display:flex;align-items:center;gap:4px}
-.chip{display:flex;align-items:center;gap:3px;padding:2px 6px;border-radius:10px;font-size:8px;font-weight:700}
+.header{display:flex;justify-content:space-between;align-items:center;height:24px;flex-shrink:0}
+.brand{display:flex;align-items:center;gap:6px}
+.brand-logo{width:18px;height:18px;border-radius:4px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:10px}
+.brand-name{font-size:11px;font-weight:700;color:var(--text-1);letter-spacing:.3px}
+.brand-ver{font-size:9px;color:var(--text-4)}
+.header-right{display:flex;align-items:center;gap:5px}
+.chip{display:flex;align-items:center;gap:3px;padding:3px 7px;border-radius:10px;font-size:9px;font-weight:700}
 .chip-live{background:rgba(220,38,38,.2);color:#fca5a5;border:1px solid rgba(220,38,38,.4)}
 .chip-refresh{background:rgba(8,145,178,.2);color:#7dd3fc;border:1px solid rgba(8,145,178,.4)}
 .live-dot{width:5px;height:5px;background:#ef4444;border-radius:50%}
 
 /* CARD BASE */
-.card{background:var(--surface);border-radius:8px;border:1px solid var(--border);position:relative;overflow:hidden;padding:4px 6px}
+.card{background:var(--surface);border-radius:8px;border:1px solid var(--border);position:relative;overflow:hidden;padding:6px 8px}
 
 /* CONTAINER */
-.main-container{display:flex;flex-direction:column;gap:4px;flex:1;min-height:0}
+.main-container{display:flex;flex-direction:column;gap:6px;flex:1;min-height:0}
 
 /* HERO ROW */
-.hero{display:flex;gap:4px;height:84px;flex-shrink:0}
-.hero-weather{flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:6px 8px}
-.hero-loc{display:flex;align-items:center;gap:3px;font-size:9px;color:var(--text-3);font-weight:500}
-.hero-loc svg{width:10px;height:10px;fill:var(--accent);flex-shrink:0}
-.hero-clock{font-size:24px;font-weight:800;color:var(--text-1);line-height:1;font-variant-numeric:tabular-nums}
-.hero-date{font-size:8px;color:var(--text-4)}
+.hero{display:flex;gap:6px;height:95px;flex-shrink:0}
+.hero-weather{flex:1;display:flex;flex-direction:column;justify-content:space-between}
+.hero-loc{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text-3);font-weight:500}
+.hero-loc svg{width:11px;height:11px;fill:var(--accent);flex-shrink:0}
+.hero-clock{font-size:26px;font-weight:800;color:var(--text-1);line-height:1;font-variant-numeric:tabular-nums}
+.hero-date{font-size:9px;color:var(--text-4)}
 .hero-weather-row{display:flex;align-items:center;justify-content:space-between}
-.hero-temp{font-size:26px;font-weight:800;line-height:1;display:flex}
-.hero-temp-sup{font-size:12px;color:var(--text-3);margin-left:1px}
-.hero-desc{font-size:9px;color:var(--text-2);font-weight:500}
+.hero-temp{font-size:28px;font-weight:800;line-height:1;display:flex}
+.hero-temp-sup{font-size:13px;color:var(--text-3);margin-left:1px}
+.hero-desc{font-size:10px;color:var(--text-2);font-weight:500}
 .hero-icon{font-size:28px;line-height:1}
-.hero-sun{display:flex;gap:3px;font-size:8px}
-.hero-sun-item{background:#0f172a;padding:2px 4px;border-radius:4px;color:var(--text-3)}
+.hero-sun{display:flex;gap:6px;font-size:9px}
+.hero-sun-item{background:#0f172a;padding:2px 6px;border-radius:4px;color:var(--text-3)}
 
-.hero-side{width:95px;display:flex;flex-direction:column;justify-content:space-between;flex-shrink:0;padding:6px}
-.side-title{font-size:7px;color:var(--text-4);font-weight:700;text-transform:uppercase;display:flex;align-items:center;gap:3px}
-.side-title::before{content:'';width:2px;height:6px;background:var(--accent);border-radius:2px}
-.side-row{display:flex;justify-content:space-between;align-items:center;font-size:8px}
+.hero-side{width:110px;display:flex;flex-direction:column;justify-content:space-between;flex-shrink:0}
+.side-title{font-size:9px;color:var(--text-4);font-weight:700;text-transform:uppercase;display:flex;align-items:center;gap:4px}
+.side-title::before{content:'';width:2px;height:8px;background:var(--accent);border-radius:2px}
+.side-row{display:flex;justify-content:space-between;align-items:center;font-size:9px}
 .side-row-label{color:var(--text-4)}
 .side-row-val{color:var(--text-1);font-weight:700}
 
 /* PRAYER */
-.prayer-row{display:grid;grid-template-columns:repeat(6,1fr);gap:3px;height:32px;flex-shrink:0}
+.prayer-row{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;height:38px;flex-shrink:0}
 .prayer-card{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2px;background:var(--surface);border-radius:6px;border:1px solid var(--border)}
-.prayer-name{font-size:6px;color:var(--text-4);font-weight:700;text-transform:uppercase}
-.prayer-time{font-size:9px;color:var(--text-1);font-weight:800}
+.prayer-name{font-size:8px;color:var(--text-4);font-weight:700;text-transform:uppercase}
+.prayer-time{font-size:10px;color:var(--text-1);font-weight:800}
 .prayer-card.active{background:#0284c7;border-color:var(--accent)}
 
 /* METRICS GRID COMPACT */
-.grid-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;flex:1;min-height:0}
-.metric{display:flex;flex-direction:column;justify-content:center;padding:3px 5px}
-.metric-label{font-size:6px;color:var(--text-4);text-transform:uppercase;font-weight:700;white-space:nowrap;overflow:hidden}
-.metric-value{font-size:11px;font-weight:800;color:var(--text-1);line-height:1.1}
-.metric-value small{font-size:7px;color:var(--text-4);margin-left:1px}
+.grid-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;flex:1;min-height:0}
+.metric{display:flex;flex-direction:column;justify-content:center}
+.metric-label{font-size:8px;color:var(--text-4);text-transform:uppercase;font-weight:700;white-space:nowrap;overflow:hidden;margin-bottom:2px}
+.metric-value{font-size:12px;font-weight:800;color:var(--text-1);line-height:1}
+.metric-value small{font-size:8px;color:var(--text-4);margin-left:2px}
 
 /* AQI */
 .aqi-card{grid-column:span 2}
-.aqi-bar{height:3px;border-radius:2px;margin-top:2px;background:linear-gradient(90deg,#22c55e,#eab308,#ef4444);position:relative}
-.aqi-marker{position:absolute;top:-2px;width:3px;height:7px;background:#fff;border-radius:1px}
+.aqi-bar{height:4px;border-radius:2px;margin-top:3px;background:linear-gradient(90deg,#22c55e,#eab308,#ef4444);position:relative}
+.aqi-marker{position:absolute;top:-2px;width:3px;height:8px;background:#fff;border-radius:1px}
 
 /* CHART & FORECAST */
-.section-compact{display:flex;flex-direction:column;justify-content:center;height:42px;flex-shrink:0}
-.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px}
-.section-title{font-size:7px;color:var(--text-3);text-transform:uppercase;font-weight:700}
-.chart-wrap{width:100%;height:26px;background:#0f172a;border-radius:4px;border:1px solid var(--border)}
+.section-compact{display:flex;flex-direction:column;justify-content:center;height:48px;flex-shrink:0}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px}
+.section-title{font-size:8px;color:var(--text-3);text-transform:uppercase;font-weight:700}
+.chart-wrap{width:100%;height:30px;background:#0f172a;border-radius:4px;border:1px solid var(--border)}
 
-.scroll-x{display:flex;gap:3px;overflow-x:hidden}
-.hour{flex:1;background:#0f172a;border-radius:4px;padding:2px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid var(--border)}
-.hour-time{font-size:6px;color:var(--text-4);font-weight:700}
-.hour-icon{font-size:10px;line-height:1}
-.hour-temp{font-size:8px;font-weight:800}
+.scroll-x{display:flex;gap:4px;overflow-x:hidden}
+.hour{flex:1;background:#0f172a;border-radius:4px;padding:3px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid var(--border)}
+.hour-time{font-size:8px;color:var(--text-4);font-weight:700}
+.hour-icon{font-size:11px;line-height:1;margin:1px 0}
+.hour-temp{font-size:9px;font-weight:800}
 
 /* TICKER & FOOTER */
-.ticker-wrap{width:100%;height:20px;flex-shrink:0;overflow:hidden;background:#1e293b;border:1px solid var(--border);border-radius:6px;display:flex;align-items:center}
-.ticker{display:flex;gap:18px;white-space:nowrap;will-change:transform;transform:translate3d(0,0,0)}
+.ticker-wrap{width:100%;height:22px;flex-shrink:0;overflow:hidden;background:#1e293b;border:1px solid var(--border);border-radius:6px;display:flex;align-items:center}
+.ticker{display:flex;gap:20px;white-space:nowrap;will-change:transform;transform:translate3d(0,0,0)}
 .tk-eco{animation:ticker-scroll 45s linear infinite}
 .tk-news{animation:ticker-scroll 60s linear infinite}
 @keyframes ticker-scroll{0%{transform:translate3d(0,0,0)}100%{transform:translate3d(-50%,0,0)}}
-.tk-item{display:flex;align-items:center;gap:3px;font-size:8px;font-weight:600}
+.tk-item{display:flex;align-items:center;gap:4px;font-size:9px;font-weight:600}
 .tk-label{color:var(--text-4);font-weight:700}
 .tk-val{color:var(--text-1);font-weight:800}
-.tk-news-item{display:flex;align-items:center;gap:3px;font-size:8px;color:var(--text-2)}
-.tk-news-tag{background:#0891b2;color:#fff;padding:1px 3px;border-radius:2px;font-size:6px;font-weight:800}
+.tk-news-item{display:flex;align-items:center;gap:4px;font-size:9px;color:var(--text-2)}
+.tk-news-tag{background:#0891b2;color:#fff;padding:1px 4px;border-radius:2px;font-size:7px;font-weight:800}
 
-.footer{display:flex;justify-content:space-between;align-items:center;font-size:7px;color:var(--text-4);height:14px;flex-shrink:0}
-.status-dot{width:5px;height:5px;border-radius:50%;background:var(--success)}
+.footer{display:flex;justify-content:space-between;align-items:center;font-size:8px;color:var(--text-4);height:16px;flex-shrink:0}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--success)}
 
-/* LAYOUT LANDSCAPE KHUSUS TABLET MATEPAD SE 10.4 */
+/* OPTIMASI HARMONIS LAYOUT TABLET (MATEPAD SE 10.4) */
 @media (min-width: 768px) and (orientation: landscape) {
-  body { padding: 8px; gap: 6px; }
-  .header { height: 28px; }
-  .brand-name { font-size: 13px; }
-  .main-container { display: grid; grid-template-columns: 320px 1fr; grid-template-rows: 1fr; gap: 8px; }
-  .hero { height: 100%; flex-direction: column; }
-  .hero-side { width: 100%; height: auto; }
-  .grid-metrics { grid-template-columns: repeat(4, 1fr); }
-  .hero-clock { font-size: 38px; }
-  .hero-temp { font-size: 40px; }
-  .metric-value { font-size: 14px; }
-  .section-compact { height: 60px; }
-  .chart-wrap { height: 42px; }
+  body { padding: 10px; gap: 8px; }
+  .header { height: 30px; }
+  .brand-name { font-size: 14px; }
+  .brand-logo { width: 22px; height: 22px; font-size: 12px; }
+  .chip { font-size: 10px; padding: 4px 8px; }
+  .main-container { display: grid; grid-template-columns: 340px 1fr; grid-template-rows: 1fr; gap: 10px; }
+  .hero { height: 100%; flex-direction: column; gap: 8px; }
+  .hero-side { width: 100%; height: auto; padding: 10px; }
+  .hero-weather { padding: 10px; }
+  .hero-clock { font-size: 42px; }
+  .hero-temp { font-size: 44px; }
+  .hero-icon { font-size: 38px; }
+  .side-title { font-size: 11px; }
+  .side-row { font-size: 11px; }
+  .prayer-row { height: 48px; gap: 6px; }
+  .prayer-name { font-size: 10px; }
+  .prayer-time { font-size: 13px; }
+  .grid-metrics { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .metric-label { font-size: 10px; }
+  .metric-value { font-size: 16px; }
+  .metric-value small { font-size: 10px; }
+  .section-compact { height: 75px; }
+  .section-title { font-size: 10px; }
+  .chart-wrap { height: 50px; }
+  .hour-time { font-size: 10px; }
+  .hour-icon { font-size: 16px; }
+  .hour-temp { font-size: 12px; }
+  .ticker-wrap { height: 28px; }
+  .tk-item, .tk-news-item { font-size: 11px; }
+  .tk-news-tag { font-size: 9px; }
+  .footer { font-size: 10px; height: 18px; }
 }
 </style>
 </head>
@@ -139,7 +158,7 @@ body{background:var(--bg-1);color:var(--text-1);display:flex;flex-direction:colu
     <div class="brand-logo">📡</div>
     <div>
       <span class="brand-name">REALTIME MONITOR</span>
-      <span class="brand-ver" id="ver">v6.0.3</span>
+      <span class="brand-ver" id="ver">v6.0.4</span>
     </div>
   </div>
   <div class="header-right">
@@ -178,7 +197,7 @@ body{background:var(--bg-1);color:var(--text-1);display:flex;flex-direction:colu
     </div>
   </div>
 
-  <div style="display:flex; flex-direction:column; gap:4px; flex:1; min-height:0;">
+  <div style="display:flex; flex-direction:column; gap:6px; flex:1; min-height:0;">
     <div class="prayer-row">
       <div class="prayer-card"><div class="prayer-name">Imsak</div><div class="prayer-time" id="pImsak">--:--</div></div>
       <div class="prayer-card"><div class="prayer-name">Subuh</div><div class="prayer-time" id="pSubuh">--:--</div></div>
@@ -204,7 +223,7 @@ body{background:var(--bg-1);color:var(--text-1);display:flex;flex-direction:colu
 
     <div class="card section-compact">
       <div class="section-head"><div class="section-title">Grafik Suhu 24 Jam</div></div>
-      <div class="chart-wrap"><svg class="chart-svg" id="tempChart" viewBox="0 0 300 26" preserveAspectRatio="none"></svg></div>
+      <div class="chart-wrap"><svg class="chart-svg" id="tempChart" viewBox="0 0 300 30" preserveAspectRatio="none"></svg></div>
     </div>
 
     <div class="card section-compact">
@@ -222,7 +241,7 @@ body{background:var(--bg-1);color:var(--text-1);display:flex;flex-direction:colu
 </div>
 
 <script>
-const VERSION='6.0.3';
+const VERSION='6.0.4';
 const W_API='https://api.open-meteo.com/v1/forecast';
 const AQ_API='https://air-quality-api.open-meteo.com/v1/air-quality';
 const GEO_API='https://nominatim.openstreetmap.org/reverse';
@@ -303,7 +322,7 @@ function renderTempChart(d){
   const pts=d.hourly.temperature_2m.slice(0,12);
   const min=Math.min(...pts),max=Math.max(...pts),range=max-min||1;
   let path='';
-  pts.forEach((v,i)=>{const x=(i/(pts.length-1))*300;const y=2+(1-(v-min)/range)*22;path+=(i===0?'M':'L')+x.toFixed(1)+','+y.toFixed(1);});
+  pts.forEach((v,i)=>{const x=(i/(pts.length-1))*300;const y=2+(1-(v-min)/range)*26;path+=(i===0?'M':'L')+x.toFixed(1)+','+y.toFixed(1);});
   document.getElementById('tempChart').innerHTML='<path d="'+path+'" fill="none" stroke="#38bdf8" stroke-width="1.5"/>';
 }
 
@@ -326,7 +345,6 @@ init();
 const PRAYER_TIMES={imsak:'04:09',subuh:'04:19',dzuhur:'11:44',ashar:'14:45',maghrib:'17:49',isya:'18:58'};
 ['pImsak','pSubuh','pDzuhur','pAshar','pMaghrib','pIsya'].forEach((id,i)=>{document.getElementById(id).textContent=Object.values(PRAYER_TIMES)[i];});
 
-/* API REAL-TIME BERITA & EKONOMI */
 async function fetchRealtimeNews(){
   try{
     const r=await fetchT('https://api.rss2json.com/v1/api.json?rss_url=https://www.cnbcindonesia.com/news/rss',6000);
@@ -378,10 +396,9 @@ async function fetchRealtimeEco(){
 
 fetchRealtimeNews();
 fetchRealtimeEco();
-setInterval(fetchRealtimeNews,600000); // Auto-update Berita tiap 10 menit
-setInterval(fetchRealtimeEco,300000);  // Auto-update Kurs & Kripto tiap 5 menit
+setInterval(fetchRealtimeNews,600000);
+setInterval(fetchRealtimeEco,300000);
 
-// Auto Check Version untuk Refresh PWA
 async function checkVersion(){
   try{const r=await fetch('version.txt?t='+Date.now(),{cache:'no-store'});const v=(await r.text()).trim();
     if(v&&!v.includes("<")&&v!==VERSION){location.reload(true);}
