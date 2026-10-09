@@ -201,7 +201,7 @@ button{border:none;background:none;color:inherit;cursor:pointer}
     <div class="brand-logo" aria-hidden="true">📡</div>
     <div class="brand-text">
       <span class="brand-name">REALTIME DASHBOARD</span>
-      <span class="brand-ver" id="ver">v6.4.0</span>
+      <span class="brand-ver" id="ver">v6.4.1</span>
     </div>
   </div>
   <div class="header-actions">
@@ -298,7 +298,7 @@ button{border:none;background:none;color:inherit;cursor:pointer}
 </footer>
 
 <script>
-const VERSION='6.4.0';
+const VERSION='6.4.1';
 const REFRESH_SEC=300;
 const FALLBACK={lat:-6.2088,lon:106.8456,fallback:true};
 const $=id=>document.getElementById(id);
@@ -637,8 +637,6 @@ async function updateTickers(){
       {i:'💵',l:'USD/IDR',v:eco.usd?'Rp'+eco.usd:'--'},
       {i:'₿',l:'BTC',v:eco.btc?'$'+eco.btc:'--'},
       {i:'⟠',l:'ETH',v:eco.eth?'$'+eco.eth:'--'},
-      {i:'⛽',l:'Pertamax',v:'Rp12.100'},
-      {i:'🛢️',l:'Pertalite',v:'Rp10.000'}
     ];
     tickerUnits.eco=ecoData.map(d=>`<div class="t-item"><span style="font-size:14px">${d.i}</span><span style="color:var(--text-secondary)">${d.l}</span><span class="t-val">${esc(d.v)}</span></div>`).join('');
 

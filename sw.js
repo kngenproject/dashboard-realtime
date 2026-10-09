@@ -1,4 +1,4 @@
-const VERSION='6.4.0';
+const VERSION='6.4.1';
 const CACHE='dash-v'+VERSION;
 const ASSETS=['./','index.html','manifest.json','icon-192.png','icon-512.png'];
 
