@@ -82,7 +82,6 @@ body{background:var(--bg-1);color:var(--text-1);display:flex;flex-direction:colu
 .metric-label{font-size:6px;color:var(--text-4);text-transform:uppercase;font-weight:700;white-space:nowrap;overflow:hidden}
 .metric-value{font-size:11px;font-weight:800;color:var(--text-1);line-height:1.1}
 .metric-value small{font-size:7px;color:var(--text-4);margin-left:1px}
-.metric-sub{font-size:6px;color:var(--text-4);white-space:nowrap;overflow:hidden}
 
 /* AQI */
 .aqi-card{grid-column:span 2}
@@ -96,17 +95,16 @@ body{background:var(--bg-1);color:var(--text-1);display:flex;flex-direction:colu
 .chart-wrap{width:100%;height:26px;background:#0f172a;border-radius:4px;border:1px solid var(--border)}
 
 .scroll-x{display:flex;gap:3px;overflow-x:hidden}
-.hour,.day{flex:1;background:#0f172a;border-radius:4px;padding:2px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid var(--border)}
-.hour-now,.day-today{background:#0284c7}
-.hour-time,.day-name{font-size:6px;color:var(--text-4);font-weight:700}
-.hour-icon,.day-icon{font-size:10px;line-height:1}
-.hour-temp,.day-temp{font-size:8px;font-weight:800}
+.hour{flex:1;background:#0f172a;border-radius:4px;padding:2px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid var(--border)}
+.hour-time{font-size:6px;color:var(--text-4);font-weight:700}
+.hour-icon{font-size:10px;line-height:1}
+.hour-temp{font-size:8px;font-weight:800}
 
 /* TICKER & FOOTER */
 .ticker-wrap{width:100%;height:20px;flex-shrink:0;overflow:hidden;background:#1e293b;border:1px solid var(--border);border-radius:6px;display:flex;align-items:center}
 .ticker{display:flex;gap:18px;white-space:nowrap;will-change:transform;transform:translate3d(0,0,0)}
-.tk-eco{animation:ticker-scroll 50s linear infinite}
-.tk-news{animation:ticker-scroll 75s linear infinite}
+.tk-eco{animation:ticker-scroll 45s linear infinite}
+.tk-news{animation:ticker-scroll 60s linear infinite}
 @keyframes ticker-scroll{0%{transform:translate3d(0,0,0)}100%{transform:translate3d(-50%,0,0)}}
 .tk-item{display:flex;align-items:center;gap:3px;font-size:8px;font-weight:600}
 .tk-label{color:var(--text-4);font-weight:700}
@@ -141,7 +139,7 @@ body{background:var(--bg-1);color:var(--text-1);display:flex;flex-direction:colu
     <div class="brand-logo">📡</div>
     <div>
       <span class="brand-name">REALTIME MONITOR</span>
-      <span class="brand-ver" id="ver">v6.0.2</span>
+      <span class="brand-ver" id="ver">v6.0.3</span>
     </div>
   </div>
   <div class="header-right">
@@ -215,8 +213,8 @@ body{background:var(--bg-1);color:var(--text-1);display:flex;flex-direction:colu
   </div>
 </div>
 
-<div class="ticker-wrap"><div class="ticker tk-eco" id="tickerEco"></div></div>
-<div class="ticker-wrap"><div class="ticker tk-news" id="tickerNews"></div></div>
+<div class="ticker-wrap"><div class="ticker tk-eco" id="tickerEco">Memuat ekonomi...</div></div>
+<div class="ticker-wrap"><div class="ticker tk-news" id="tickerNews">Memuat berita...</div></div>
 
 <div class="footer">
   <div><span class="status-dot" id="statusDot"></span> <span id="status">Memuat...</span></div>
@@ -224,7 +222,7 @@ body{background:var(--bg-1);color:var(--text-1);display:flex;flex-direction:colu
 </div>
 
 <script>
-const VERSION='6.0.2';
+const VERSION='6.0.3';
 const W_API='https://api.open-meteo.com/v1/forecast';
 const AQ_API='https://air-quality-api.open-meteo.com/v1/air-quality';
 const GEO_API='https://nominatim.openstreetmap.org/reverse';
@@ -238,7 +236,7 @@ function tick(){
   document.getElementById('clock').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')+':'+String(n.getSeconds()).padStart(2,'0');
   const d=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
   const m=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-  document.getElementById('date').textContent=d[n.getDay()]+', '+n.getDate()+' '+m[n.getMonth()]+' '+m[n.getMonth()]+' '+n.getFullYear();
+  document.getElementById('date').textContent=d[n.getDay()]+', '+n.getDate()+' '+m[n.getMonth()]+' '+n.getFullYear();
 }
 setInterval(tick,1000);tick();
 
@@ -328,19 +326,68 @@ init();
 const PRAYER_TIMES={imsak:'04:09',subuh:'04:19',dzuhur:'11:44',ashar:'14:45',maghrib:'17:49',isya:'18:58'};
 ['pImsak','pSubuh','pDzuhur','pAshar','pMaghrib','pIsya'].forEach((id,i)=>{document.getElementById(id).textContent=Object.values(PRAYER_TIMES)[i];});
 
-const ECON_DATA=[{icon:'💵',label:'USD/IDR',val:'Rp17.887'},{icon:'🛢️',label:'Pertalite',val:'Rp10.000'},{icon:'⛽',label:'Pertamax',val:'Rp15.950'}];
-const NEWS_DATA=[{tag:'INFO',text:'Luhut: Ekonomi RI Tetap Kuat Pasca Ketidakpastian Global'},{tag:'BI',text:'Suku Bunga BI Rate Ditahan Di 5.75%'}];
-
-function buildTickers(){
-  let h1='',h2='';
-  for(let i=0;i<3;i++){
-    ECON_DATA.forEach(d=>{h1+='<div class="tk-item"><span>'+d.icon+'</span><span class="tk-label">'+d.label+'</span><span class="tk-val">'+d.val+'</span></div>';});
-    NEWS_DATA.forEach(n=>{h2+='<div class="tk-news-item"><span class="tk-news-tag">'+n.tag+'</span><span>'+n.text+'</span></div>';});
+/* API REAL-TIME BERITA & EKONOMI */
+async function fetchRealtimeNews(){
+  try{
+    const r=await fetchT('https://api.rss2json.com/v1/api.json?rss_url=https://www.cnbcindonesia.com/news/rss',6000);
+    const j=await r.json();
+    if(j.items&&j.items.length>0){
+      let h='';
+      for(let k=0;k<2;k++){
+        j.items.slice(0,8).forEach(n=>{
+          h+='<div class="tk-news-item"><span class="tk-news-tag">TERKINI</span><span>'+n.title+'</span></div>';
+        });
+      }
+      document.getElementById('tickerNews').innerHTML=h;
+    }
+  }catch(e){
+    document.getElementById('tickerNews').innerHTML='<div class="tk-news-item"><span>Gagal memuat berita terkini</span></div>';
   }
-  document.getElementById('tickerEco').innerHTML=h1;
-  document.getElementById('tickerNews').innerHTML=h2;
 }
-buildTickers();
+
+async function fetchRealtimeEco(){
+  try{
+    const[rUsd,rCrypto]=await Promise.all([
+      fetchT('https://open.er-api.com/v6/latest/USD',5000).then(res=>res.json()),
+      fetchT('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd',5000).then(res=>res.json())
+    ]);
+    
+    const usdIdr=rUsd.rates&&rUsd.rates.IDR?Math.round(rUsd.rates.IDR):'--';
+    const btc=rCrypto.bitcoin?rCrypto.bitcoin.usd:'--';
+    const eth=rCrypto.ethereum?rCrypto.ethereum.usd:'--';
+    
+    const items=[
+      {icon:'💵',label:'USD/IDR',val:'Rp'+usdIdr.toLocaleString('id-ID')},
+      {icon:'₿',label:'BITCOIN',val:'$'+btc.toLocaleString()},
+      {icon:'⟠',label:'ETHEREUM',val:'$'+eth.toLocaleString()},
+      {icon:'⛽',label:'Pertamax',val:'Rp12.100'},
+      {icon:'🛢️',label:'Pertalite',val:'Rp10.000'}
+    ];
+    
+    let h='';
+    for(let k=0;k<3;k++){
+      items.forEach(d=>{
+        h+='<div class="tk-item"><span>'+d.icon+'</span><span class="tk-label">'+d.label+'</span><span class="tk-val">'+d.val+'</span></div>';
+      });
+    }
+    document.getElementById('tickerEco').innerHTML=h;
+  }catch(e){
+    document.getElementById('tickerEco').innerHTML='<div class="tk-item"><span class="tk-label">USD/IDR</span><span class="tk-val">Rp15.800</span></div>';
+  }
+}
+
+fetchRealtimeNews();
+fetchRealtimeEco();
+setInterval(fetchRealtimeNews,600000); // Auto-update Berita tiap 10 menit
+setInterval(fetchRealtimeEco,300000);  // Auto-update Kurs & Kripto tiap 5 menit
+
+// Auto Check Version untuk Refresh PWA
+async function checkVersion(){
+  try{const r=await fetch('version.txt?t='+Date.now(),{cache:'no-store'});const v=(await r.text()).trim();
+    if(v&&!v.includes("<")&&v!==VERSION){location.reload(true);}
+  }catch(e){}
+}
+setInterval(checkVersion,30000);
 </script>
 </body>
 </html>
