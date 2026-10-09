@@ -192,6 +192,7 @@ button{border:none;background:none;color:inherit;cursor:pointer}
   .aqi-marker,.info-item{transition:none}
   .main-content{scroll-behavior:auto}
 }
+body{transition:filter 2s}body.dim{filter:brightness(.55)}
 </style>
 </head>
 <body>
@@ -201,10 +202,11 @@ button{border:none;background:none;color:inherit;cursor:pointer}
     <div class="brand-logo" aria-hidden="true">📡</div>
     <div class="brand-text">
       <span class="brand-name">REALTIME DASHBOARD</span>
-      <span class="brand-ver" id="ver">v6.4.1</span>
+      <span class="brand-ver" id="ver">v6.5.3</span>
     </div>
   </div>
   <div class="header-actions">
+    <button class="badge badge-fs" id="locBtn" aria-label="Atur lokasi" title="Atur lokasi">📍</button>
     <button class="badge badge-fs" id="fsBtn" aria-label="Layar penuh" title="Layar penuh" hidden>⛶</button>
     <button class="badge badge-sync" id="countdown" aria-label="Refresh data" title="Tap untuk refresh"><span class="spin">⟳</span><span id="cdText">--:--</span></button>
     <div class="badge badge-live" title="Layar tetap menyala: tidak aktif"><span class="dot" id="liveDot"></span>LIVE</div>
@@ -282,6 +284,7 @@ button{border:none;background:none;color:inherit;cursor:pointer}
     <div class="card card-chart card-live">
       <div class="card-header">Grafik Suhu (12 Jam)</div>
       <div class="chart-container"><svg class="chart-svg" id="tempChart" preserveAspectRatio="none" role="img" aria-label="Grafik suhu 12 jam ke depan"></svg></div>
+      <div id="srcLine" style="font-size:10px;color:var(--text-muted);margin-top:8px;line-height:1.5"></div>
     </div>
   </div>
 </main>
@@ -298,7 +301,7 @@ button{border:none;background:none;color:inherit;cursor:pointer}
 </footer>
 
 <script>
-const VERSION='6.4.1';
+const VERSION='6.5.3';
 const REFRESH_SEC=300;
 const FALLBACK={lat:-6.2088,lon:106.8456,fallback:true};
 const $=id=>document.getElementById(id);
@@ -364,11 +367,11 @@ function renderCalendar(){
   const neptuPas=[5,9,7,4,8];
   const utcDay=Math.floor(Date.UTC(now.getFullYear(),now.getMonth(),now.getDate())/86400000);
   const baseDay=Math.floor(Date.UTC(2000,0,1)/86400000);
-  const pasIdx=(((1+utcDay-baseDay)%5)+5)%5;
-  let hijri;
-  try{hijri=new Intl.DateTimeFormat('id-ID-u-ca-islamic-umalqura',{day:'numeric',month:'short',year:'numeric'}).format(now);}
+  const pasIdx=(((0+utcDay-baseDay)%5)+5)%5;
+  const hj=+localStorage.getItem('dash_hj')||0;let hijri;
+  try{hijri=new Intl.DateTimeFormat('id-ID-u-ca-islamic-umalqura',{day:'numeric',month:'short',year:'numeric'}).format(new Date(now.getTime()+hj*864e5));}
   catch(e){hijri='--';}
-  $('calHijri').textContent=hijri;
+  $('calHijri').textContent=hijri+(hj?' ('+(hj>0?'+':'')+hj+')':'');
   $('calWeton').textContent=HARI[now.getDay()]+' '+pasaran[pasIdx]+' · '+(neptuHari[now.getDay()]+neptuPas[pasIdx]);
 }
 setInterval(tick,1000);tick();
@@ -418,6 +421,7 @@ async function fetchPrayer(lat,lon){
     const clean=s=>String(s).replace(/\s*\(.*\)/,'').trim();
     PRAYER_TIMES={Imsak:clean(t.Imsak),Subuh:clean(t.Fajr),Dzuhur:clean(t.Dhuhr),Ashar:clean(t.Asr),Maghrib:clean(t.Maghrib),Isya:clean(t.Isha)};
     prayerDay=dayKey();
+    mark('sholat');
     store.set('dash_prayer',{day:prayerDay,times:PRAYER_TIMES});
     setPrayerDisplay();updatePrayerActive();
   }catch(e){console.warn('Prayer API gagal:',e);}
@@ -442,7 +446,7 @@ function fetchT(url,ms){
 }
 function getLoc(){
   return new Promise(res=>{
-    if(!navigator.geolocation)return res(FALLBACK);
+    const m=store.get('dash_manual');if(m)return res({lat:m.lat,lon:m.lon,manual:m.name});if(!navigator.geolocation)return res(FALLBACK);
     navigator.geolocation.getCurrentPosition(
       p=>res({lat:p.coords.latitude,lon:p.coords.longitude}),
       ()=>res(FALLBACK),
@@ -451,7 +455,7 @@ function getLoc(){
   });
 }
 async function fetchPlaceName(lat,lon){
-  const saved=store.get('dash_place');
+  if(coords.manual)return coords.manual;const saved=store.get('dash_place');
   if(saved&&Math.abs(saved.lat-lat)<0.05&&Math.abs(saved.lon-lon)<0.05&&saved.name)return saved.name;
   try{
     const r=await fetchT(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&zoom=10&accept-language=id`,6000);
@@ -536,7 +540,7 @@ async function refreshDashboard(){
     if(!w||!w.current)throw new Error('data kosong');
     renderWeather(w,aq);
     store.set('dash_last',{w,aq,place:placeName,fallback:!!coords.fallback});
-    lastSync=Date.now();
+    mark('cuaca');if(aq)mark('aqi');renderSrc();
     $('main').classList.remove('stale');
     hideError();
   }catch(e){
@@ -544,7 +548,7 @@ async function refreshDashboard(){
     $('main').classList.add('stale');
     showError(navigator.onLine?'Gagal memuat data. Menampilkan data terakhir.':'Offline. Menampilkan data terakhir.');
   }finally{
-    loading=false;busy=false;updateCountdown();
+    loading=false;busy=false;lastSync=Date.now();updateCountdown();
   }
 }
 function forceRefresh(){
@@ -624,6 +628,9 @@ async function updateTickers(){
       fetchT('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd',6000).then(r=>r.json()).catch(()=>null),
       fetchT('https://api.rss2json.com/v1/api.json?rss_url=https://www.cnbcindonesia.com/news/rss',7000).then(r=>r.json()).catch(()=>null)
     ]);
+    if(rUsd&&rUsd.rates)mark('kurs');
+    if(rCrypto&&rCrypto.bitcoin)mark('kripto');
+    if(rNews&&rNews.items&&rNews.items.length)mark('berita');
     const old=store.get('dash_eco')||{};
     const eco={
       usd:(rUsd&&rUsd.rates&&rUsd.rates.IDR)?Math.round(rUsd.rates.IDR).toLocaleString('id-ID'):old.usd,
@@ -725,6 +732,65 @@ refreshDashboard();
 setInterval(refreshDashboard,REFRESH_SEC*1000);
 updateTickers();
 setInterval(updateTickers,300000);
+
+// ============ LOKASI MANUAL ============
+$('locBtn').addEventListener('click',async()=>{
+  const cur=store.get('dash_manual');
+  const v=prompt('Kota atau "lat,lon" (kosongkan untuk pakai GPS):',cur?cur.name:'');
+  if(v===null)return;
+  const s=v.trim();
+  if(!s){localStorage.removeItem('dash_manual');}
+  else{
+    const m=s.match(/^(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)$/);
+    try{
+      if(m){
+        const la=+m[1],lo=+m[2];
+        if(Math.abs(la)>90||Math.abs(lo)>180){alert('Koordinat tidak valid');return;}
+        store.set('dash_manual',{lat:la,lon:lo,name:la.toFixed(2)+', '+lo.toFixed(2)});
+      }else{
+        const r=await fetchT('https://geocoding-api.open-meteo.com/v1/search?count=1&language=id&name='+encodeURIComponent(s),8000);
+        const g=((await r.json()).results||[])[0];
+        if(!g){alert('Kota tidak ditemukan');return;}
+        store.set('dash_manual',{lat:g.latitude,lon:g.longitude,name:g.name});
+      }
+    }catch(e){alert('Gagal mencari kota. Cek koneksi.');return;}
+  }
+  prayerDay='';
+  forceRefresh();
+});
+
+// ============ MODE REDUP MALAM + ANTI BURN-IN ============
+function applyDim(){
+  const n=new Date(),c=n.getHours()*60+n.getMinutes();
+  document.body.classList.toggle('dim',c>=toMin(PRAYER_TIMES.Isya)||c<toMin(PRAYER_TIMES.Subuh));
+}
+function shiftPx(){
+  const r=()=>Math.floor(Math.random()*5)-2;
+  document.body.style.transform='translate('+r()+'px,'+r()+'px)';
+}
+applyDim();setInterval(applyDim,60000);setInterval(shiftPx,300000);
+
+// ============ STATUS SUMBER DATA ============
+const okAt=store.get('dash_ok')||{};
+const SRC=[['cuaca','Cuaca',1200],['aqi','AQI',1200],['sholat','Sholat',93600],['kurs','Kurs',1200],['kripto','Kripto',1200],['berita','Berita',1200]];
+function mark(k){okAt[k]=Date.now();store.set('dash_ok',okAt);}
+function renderSrc(){
+  $('srcLine').innerHTML=SRC.map(([k,l,max])=>{
+    const t=okAt[k];
+    const hm=t?new Date(t).toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}):'--';
+    const bad=!t||(Date.now()-t)/1000>max;
+    return '<span style="'+(bad?'color:var(--warning)':'')+'">'+l+' '+hm+'</span>';
+  }).join(' · ');
+}
+setInterval(renderSrc,30000);renderSrc();
+
+// ============ KOREKSI HIJRIAH ============
+const hjEl=$('calHijri').parentElement;
+hjEl.style.cursor='pointer';hjEl.title='Tap: koreksi tanggal Hijriah (0/+1/-1)';
+hjEl.addEventListener('click',()=>{
+  const o=(((+localStorage.getItem('dash_hj')||0)+2)%3)-1;
+  localStorage.setItem('dash_hj',o);renderCalendar();
+});
 </script>
 </body>
 </html>

@@ -1,6 +1,6 @@
-const VERSION='6.4.1';
+const VERSION='6.5.3';
 const CACHE='dash-v'+VERSION;
-const ASSETS=['./','index.html','manifest.json','icon-192.png','icon-512.png'];
+const ASSETS=['./','index.html','manifest.json','icon-192.png','icon-512.png','icon-maskable-512.png'];
 
 self.addEventListener('install',e=>{
   e.waitUntil(
