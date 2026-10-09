@@ -28,103 +28,178 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;width:100%;overflow:hidden;background:var(--bg-main);color:var(--text-primary)}
-body{display:flex;flex-direction:column}
+body{display:flex;flex-direction:column;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
 
-.header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--bg-main);z-index:10;border-bottom:1px solid var(--border);flex-shrink:0}
-.main-content{flex:1;overflow-y:auto;overflow-x:hidden;padding:16px;display:flex;flex-direction:column;gap:16px;scroll-behavior:smooth}
-.footer-tickers{flex-shrink:0;background:var(--surface);border-top:1px solid var(--border);display:flex;flex-direction:column;z-index:10}
-
-.brand{display:flex;align-items:center;gap:10px}
-.brand-logo{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--accent),#2563eb);display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 4px 10px rgba(14,165,233,0.3)}
-.brand-text{display:flex;flex-direction:column}
-.brand-name{font-size:14px;font-weight:800;letter-spacing:0.5px}
-.brand-ver{font-size:10px;color:var(--text-secondary);font-weight:600}
-.header-actions{display:flex;align-items:center;gap:8px}
-.badge{display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700}
+/* === HEADER === */
+.header{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--bg-main);z-index:10;border-bottom:1px solid var(--border);flex-shrink:0;gap:8px}
+.brand{display:flex;align-items:center;gap:8px;min-width:0;flex:1}
+.brand-logo{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,var(--accent),#2563eb);display:flex;align-items:center;justify-content:center;font-size:13px;box-shadow:0 4px 10px rgba(14,165,233,0.3);flex-shrink:0}
+.brand-text{display:flex;flex-direction:column;min-width:0}
+.brand-name{font-size:12px;font-weight:800;letter-spacing:0.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand-ver{font-size:9px;color:var(--text-secondary);font-weight:600}
+.header-actions{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.badge{display:flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
 .badge-live{background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.3)}
 .badge-sync{background:rgba(14,165,233,0.15);color:var(--accent-light);border:1px solid rgba(14,165,233,0.3);cursor:pointer;transition:background .2s}
 .badge-sync:active{background:rgba(14,165,233,0.3)}
 .dot{width:6px;height:6px;border-radius:50%;background:var(--danger);box-shadow:0 0 6px var(--danger);animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
 
-.card{background:var(--surface);border-radius:16px;border:1px solid var(--border);padding:16px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -2px rgba(0,0,0,0.1)}
-.card-header{display:flex;align-items:center;gap:6px;margin-bottom:12px;font-size:12px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px}
+/* === MAIN === */
+.main-content{flex:1;overflow-y:auto;overflow-x:hidden;padding:12px;display:grid;grid-template-columns:1fr;gap:12px;scroll-behavior:smooth;align-content:start;-webkit-overflow-scrolling:touch}
+.col-left,.col-right{display:flex;flex-direction:column;gap:12px;min-width:0}
+
+/* === CARD === */
+.card{background:var(--surface);border-radius:14px;border:1px solid var(--border);padding:14px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -2px rgba(0,0,0,0.1);min-width:0}
+.card-header{display:flex;align-items:center;gap:6px;margin-bottom:10px;font-size:11px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px}
 .card-header::before{content:'';width:4px;height:12px;background:var(--accent);border-radius:4px}
 
-/* ERROR BANNER */
+/* === ERROR BANNER === */
 .error-banner{display:none;align-items:center;justify-content:space-between;gap:12px;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.4);color:#fca5a5;padding:10px 14px;border-radius:12px;font-size:12px;font-weight:600}
 .error-banner.show{display:flex}
-.error-banner button{background:var(--danger);color:#fff;border:none;padding:6px 12px;border-radius:8px;font-weight:700;font-size:11px;cursor:pointer}
+.error-banner button{background:var(--danger);color:#fff;border:none;padding:6px 12px;border-radius:8px;font-weight:700;font-size:11px;cursor:pointer;flex-shrink:0}
 .error-banner button:active{transform:scale(0.96)}
 
-.hero-grid{display:grid;grid-template-columns:1fr;gap:12px}
+/* === HERO === */
+.hero-grid{display:grid;grid-template-columns:1fr;gap:10px}
 .hero-time{display:flex;flex-direction:column;justify-content:center}
-.time-clock{font-size:48px;font-weight:900;line-height:1;letter-spacing:-1px;font-variant-numeric:tabular-nums;background:linear-gradient(to right,#fff,var(--text-secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.time-date{font-size:13px;color:var(--text-secondary);margin-top:4px;font-weight:500}
-.hero-weather{display:flex;align-items:center;justify-content:space-between;background:rgba(15,23,42,0.5);padding:12px;border-radius:12px}
-.weather-temp{display:flex;align-items:flex-start}
-.weather-temp .val{font-size:36px;font-weight:800;line-height:1;transition:color .3s}
-.weather-temp .unit{font-size:16px;color:var(--text-secondary);margin-top:2px}
-.weather-info{display:flex;flex-direction:column;gap:2px}
-.weather-desc{font-size:13px;font-weight:600;color:var(--text-primary)}
-.weather-loc{font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:4px}
-.weather-icon{font-size:36px;line-height:1;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.4))}
+.time-clock{font-size:clamp(36px,10vw,52px);font-weight:900;line-height:1;letter-spacing:-1px;font-variant-numeric:tabular-nums;background:linear-gradient(to right,#fff,var(--text-secondary));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.time-date{font-size:12px;color:var(--text-secondary);margin-top:4px;font-weight:500}
+.hero-weather{display:flex;align-items:center;justify-content:space-between;background:rgba(15,23,42,0.5);padding:10px 12px;border-radius:10px;gap:8px}
+.weather-info{min-width:0;flex:1}
+.weather-loc{font-size:10px;color:var(--text-muted);display:flex;align-items:center;gap:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.weather-loc svg{flex-shrink:0}
+.weather-temp{display:flex;align-items:flex-start;margin:2px 0}
+.weather-temp .val{font-size:clamp(26px,7vw,38px);font-weight:800;line-height:1;transition:color .3s}
+.weather-temp .unit{font-size:13px;color:var(--text-secondary);margin-top:2px}
+.weather-desc{font-size:12px;font-weight:600;color:var(--text-primary)}
+.weather-icon{font-size:clamp(26px,7vw,38px);line-height:1;flex-shrink:0;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.4))}
 
-.metrics-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.metric-box{background:rgba(15,23,42,0.4);padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.02)}
-.metric-label{font-size:11px;color:var(--text-secondary);font-weight:600;margin-bottom:4px}
-.metric-val{font-size:18px;font-weight:800;display:flex;align-items:baseline;gap:2px}
-.metric-val small{font-size:11px;color:var(--text-muted);font-weight:600}
-
-.aqi-box{grid-column:1 / -1;display:flex;align-items:center;justify-content:space-between;padding:12px 16px}
-.aqi-cat{font-size:10px;font-weight:800;letter-spacing:0.4px;margin-top:3px;transition:color .3s}
-.aqi-bar-container{flex:1;margin-left:16px;height:6px;background:#334155;border-radius:4px;position:relative}
+/* === METRICS === */
+.metrics-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.metric-box{background:rgba(15,23,42,0.4);padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.02);min-width:0}
+.metric-label{font-size:10px;color:var(--text-secondary);font-weight:600;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.metric-val{font-size:16px;font-weight:800;display:flex;align-items:baseline;gap:2px}
+.metric-val small{font-size:10px;color:var(--text-muted);font-weight:600}
+.aqi-box{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding:10px 12px;gap:12px}
+.aqi-cat{font-size:10px;font-weight:800;letter-spacing:0.4px;margin-top:2px;transition:color .3s}
+.aqi-bar-container{flex:1;height:6px;background:#334155;border-radius:4px;position:relative;min-width:60px}
 .aqi-bar-fill{position:absolute;top:0;left:0;height:100%;border-radius:4px;background:linear-gradient(90deg,var(--success),#84cc16,var(--warning),var(--danger),#a855f7)}
 .aqi-marker{position:absolute;top:-4px;width:14px;height:14px;background:#fff;border-radius:50%;box-shadow:0 0 6px rgba(0,0,0,0.5);border:2px solid var(--surface);transform:translateX(-50%);transition:left .5s ease}
 
-.info-row{display:flex;gap:12px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+/* === INFO ROWS === */
+.info-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .info-row::-webkit-scrollbar{display:none}
-.info-item{flex:0 0 auto;background:rgba(15,23,42,0.4);padding:10px 16px;border-radius:12px;text-align:center;min-width:80px;border:1px solid transparent;transition:background .3s,border-color .3s}
+.info-item{flex:0 0 auto;background:rgba(15,23,42,0.4);padding:8px 12px;border-radius:10px;text-align:center;min-width:70px;border:1px solid transparent;transition:background .3s,border-color .3s}
 .info-item.active{background:rgba(14,165,233,0.15);border-color:rgba(14,165,233,0.3)}
-.info-label{font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;margin-bottom:4px}
+.info-label{font-size:9px;color:var(--text-muted);font-weight:700;text-transform:uppercase;margin-bottom:3px;letter-spacing:0.3px}
 .info-item.active .info-label{color:var(--accent-light)}
-.info-val{font-size:14px;font-weight:800;color:var(--text-primary)}
+.info-val{font-size:13px;font-weight:800;color:var(--text-primary);font-variant-numeric:tabular-nums}
 .info-item.active .info-val{color:var(--accent-light)}
-.info-sub{font-size:9px;color:var(--accent-light);font-weight:700;margin-top:3px;height:11px;letter-spacing:0.3px}
+.info-sub{font-size:9px;color:var(--accent-light);font-weight:700;margin-top:2px;height:11px;letter-spacing:0.3px}
 
+/* === CHART === */
 .chart-container{width:100%;height:100px;position:relative}
 .chart-svg{width:100%;height:100%;display:block;overflow:visible}
 .chart-tooltip{font-size:10px;fill:var(--text-secondary);font-weight:600}
 .chart-hr{font-size:9px;fill:var(--text-muted);font-weight:600}
 
-.ticker-row{display:flex;align-items:center;height:32px;overflow:hidden;border-bottom:1px solid var(--border);position:relative}
+/* === TICKERS === */
+.footer-tickers{flex-shrink:0;background:var(--surface);border-top:1px solid var(--border);display:flex;flex-direction:column;z-index:10}
+.ticker-row{display:flex;align-items:center;height:30px;overflow:hidden;border-bottom:1px solid var(--border);position:relative}
 .ticker-row:last-child{border-bottom:none}
-.ticker-label-static{position:absolute;left:0;top:0;height:100%;padding:0 12px;background:var(--surface);display:flex;align-items:center;font-size:10px;font-weight:800;color:var(--accent-light);z-index:2;box-shadow:4px 0 8px rgba(30,41,59,0.9)}
-.ticker-content{display:flex;gap:32px;white-space:nowrap;padding-left:100px;will-change:transform;animation:scrollLeft 40s linear infinite}
+.ticker-label-static{position:absolute;left:0;top:0;height:100%;padding:0 10px;background:var(--surface);display:flex;align-items:center;font-size:10px;font-weight:800;color:var(--accent-light);z-index:2;box-shadow:4px 0 8px rgba(30,41,59,0.9)}
+.ticker-content{display:flex;gap:24px;white-space:nowrap;padding-left:88px;will-change:transform;animation:scrollLeft 40s linear infinite}
 .ticker-row:hover .ticker-content,.ticker-row.paused .ticker-content{animation-play-state:paused}
 @keyframes scrollLeft{0%{transform:translate3d(0,0,0)}100%{transform:translate3d(-100%,0,0)}}
-.t-item{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600}
+.t-item{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600}
 .t-val{font-weight:800}
 .tk-news-tag{background:var(--accent);color:#fff;font-size:9px;padding:2px 6px;border-radius:4px;font-weight:800;margin-right:6px}
 
-@media (max-width:380px){
-  .time-clock{font-size:40px}
-  .weather-temp .val{font-size:30px}
-  .weather-icon{font-size:30px}
+/* =========================================
+   RESPONSIVE BREAKPOINTS
+   ========================================= */
+
+/* Ultra narrow: fold cover, small phones */
+@media (max-width:360px){
+  .main-content{padding:8px;gap:8px}
+  .col-left,.col-right{gap:8px}
+  .card{padding:10px;border-radius:12px}
+  .time-clock{font-size:32px}
+  .weather-temp .val{font-size:24px}
+  .weather-icon{font-size:24px}
+  .brand-name{font-size:11px}
+  .badge{font-size:9px;padding:2px 7px}
+  .metrics-grid{gap:6px}
+  .metric-box{padding:8px}
+  .metric-val{font-size:14px}
+  .info-item{padding:6px 10px;min-width:60px}
+  .info-val{font-size:12px}
+  .chart-container{height:80px}
+  .ticker-row{height:26px}
+  .t-item{font-size:10px}
 }
 
-@media (min-width: 768px) and (orientation: landscape) {
-  .main-content{flex-direction:row;align-items:stretch;overflow-y:hidden}
-  .col-left{flex:0 0 380px;display:flex;flex-direction:column;gap:16px}
-  .col-right{flex:1;display:flex;flex-direction:column;gap:16px}
-  .hero-grid{grid-template-columns:1fr}
+/* Landscape phone: 2 kolom padat */
+@media (orientation:landscape) and (max-height:520px) and (max-width:900px){
+  .header{padding:6px 12px}
+  .main-content{grid-template-columns:1fr 1fr;gap:8px;padding:8px}
+  .col-left,.col-right{gap:8px}
+  .card{padding:10px;border-radius:12px}
+  .card-header{font-size:10px;margin-bottom:6px}
+  .time-clock{font-size:clamp(26px,4.5vw,38px)}
+  .time-date{font-size:11px}
+  .weather-temp .val{font-size:clamp(20px,3.5vw,30px)}
+  .weather-icon{font-size:clamp(20px,3.5vw,30px)}
+  .chart-container{height:70px}
+  .metrics-grid{grid-template-columns:repeat(3,1fr);gap:6px}
+  .metric-box{padding:8px}
+  .metric-label{font-size:9px}
+  .metric-val{font-size:13px}
+  .info-item{padding:6px 10px;min-width:58px}
+  .info-val{font-size:12px}
+  .info-sub{font-size:8px}
+  .ticker-row{height:24px}
+  .t-item{font-size:10px}
+  .ticker-content{gap:20px;padding-left:80px}
+}
+
+/* TABLET PORTRAIT / LARGE PHONE LANDSCAPE */
+@media (min-width:700px){
+  .main-content{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:14px;padding:14px}
+  .col-left,.col-right{gap:14px}
+  .time-clock{font-size:clamp(48px,6vw,58px)}
+  .weather-temp .val{font-size:clamp(34px,3.5vw,42px)}
+  .weather-icon{font-size:clamp(34px,3.5vw,42px)}
+  .card{padding:16px;border-radius:16px}
+  .card-header{font-size:12px;margin-bottom:12px}
+  .metrics-grid{grid-template-columns:repeat(3,1fr);gap:10px}
+  .metric-val{font-size:18px}
+  .info-item{flex:1 1 0;min-width:60px;padding:9px 12px}
+  .info-val{font-size:14px}
+  .info-sub{font-size:10px}
+  .chart-container{height:130px}
+  .card-chart{display:flex;flex-direction:column;flex:1 0 auto}
+  .card-chart .chart-container{flex:1 1 auto;min-height:100px}
+  .t-item{font-size:12px}
+  .ticker-content{gap:32px;padding-left:100px}
+  .ticker-row{height:32px}
+}
+
+/* DESKTOP / TABLET LANDSCAPE */
+@media (min-width:1000px){
+  .main-content{grid-template-columns:340px minmax(0,1fr);gap:16px;padding:16px}
+  .col-left,.col-right{gap:16px}
   .time-clock{font-size:64px}
   .weather-temp .val{font-size:48px}
   .weather-icon{font-size:48px}
-  .metrics-grid{grid-template-columns:repeat(3,1fr);flex:1}
-  .chart-container{flex:1;min-height:150px}
-  .info-item{flex:1;min-width:0}
-  .info-row{flex-wrap:wrap;overflow-x:hidden}
+  .chart-container{height:150px}
+}
+
+/* VERY WIDE */
+@media (min-width:1400px){
+  .main-content{grid-template-columns:380px minmax(0,1fr);gap:20px;padding:20px}
+  .chart-container{height:180px}
 }
 </style>
 </head>
@@ -135,7 +210,7 @@ body{display:flex;flex-direction:column}
     <div class="brand-logo">📡</div>
     <div class="brand-text">
       <span class="brand-name">REALTIME DASHBOARD</span>
-      <span class="brand-ver" id="ver">v6.2.0</span>
+      <span class="brand-ver" id="ver">v6.3.0</span>
     </div>
   </div>
   <div class="header-actions">
@@ -191,7 +266,7 @@ body{display:flex;flex-direction:column}
       </div>
     </div>
 
-    <div class="card" style="display:flex; flex-direction:column; flex:1">
+    <div class="card">
       <div class="card-header">Metrik Kondisi Udara</div>
       <div class="metrics-grid">
         <div class="metric-box"><div class="metric-label">💧 Kelembapan</div><div class="metric-val" id="hum">--<small>%</small></div></div>
@@ -212,7 +287,7 @@ body{display:flex;flex-direction:column}
       </div>
     </div>
 
-    <div class="card">
+    <div class="card card-chart">
       <div class="card-header">Grafik Suhu (12 Jam)</div>
       <div class="chart-container"><svg class="chart-svg" id="tempChart" preserveAspectRatio="none"></svg></div>
     </div>
@@ -231,7 +306,7 @@ body{display:flex;flex-direction:column}
 </footer>
 
 <script>
-const VERSION='6.2.0';
+const VERSION='6.3.0';
 const REFRESH_SEC=300;
 const FALLBACK={lat:-6.2088,lon:106.8456};
 document.getElementById('ver').textContent='v'+VERSION;
@@ -603,6 +678,51 @@ async function checkVersion(){
   }catch(e){}
 }
 setInterval(checkVersion,30000);
+
+// ============ SCREEN WAKE LOCK ============
+let wakeLock = null;
+let wakeLockWanted = true;
+
+async function requestWakeLock(){
+  if(!('wakeLock' in navigator)) return;
+  if(!wakeLockWanted) return;
+  try{
+    wakeLock = await navigator.wakeLock.request('screen');
+    wakeLock.addEventListener('release', () => {
+      // Browser lepas otomatis (misal tab jadi background)
+      wakeLock = null;
+    });
+  }catch(e){
+    console.warn('Wake Lock gagal:', e);
+  }
+}
+
+// Minta wake lock saat pertama load (perlu interaksi user di beberapa browser)
+requestWakeLock();
+
+// Re-acquire ketika tab kembali visible
+document.addEventListener('visibilitychange', () => {
+  if(document.visibilityState === 'visible') requestWakeLock();
+});
+
+// Wake lock pertama butuh gesture user di Chrome Android.
+// Pasang sekali di gesture pertama (tap/klik/scroll).
+function firstGesture(){
+  requestWakeLock();
+  document.removeEventListener('click', firstGesture);
+  document.removeEventListener('touchstart', firstGesture);
+  document.removeEventListener('keydown', firstGesture);
+}
+document.addEventListener('click', firstGesture, {once:true});
+document.addEventListener('touchstart', firstGesture, {once:true, passive:true});
+document.addEventListener('keydown', firstGesture, {once:true});
+
+// Toggle indikator visual (kalau perlu, nanti bisa dipasang ke badge)
+function updateWakeIndicator(on){
+  const dot = document.querySelector('.badge-live .dot');
+  if(dot) dot.style.background = on ? 'var(--success)' : 'var(--danger)';
+}
+
 </script>
 </body>
 </html>
