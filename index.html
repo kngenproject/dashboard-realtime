@@ -19,7 +19,7 @@
   --border:#334155;
   --text-primary:#f8fafc;
   --text-secondary:#94a3b8;
-  --text-muted:#64748b;
+  --text-muted:#7c8ba1;
   --accent:#0ea5e9;
   --accent-light:#38bdf8;
   --success:#10b981;
@@ -42,7 +42,8 @@ body{display:flex;flex-direction:column}
 .header-actions{display:flex;align-items:center;gap:8px}
 .badge{display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700}
 .badge-live{background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.3)}
-.badge-sync{background:rgba(14,165,233,0.15);color:var(--accent-light);border:1px solid rgba(14,165,233,0.3)}
+.badge-sync{background:rgba(14,165,233,0.15);color:var(--accent-light);border:1px solid rgba(14,165,233,0.3);cursor:pointer;transition:background .2s}
+.badge-sync:active{background:rgba(14,165,233,0.3)}
 .dot{width:6px;height:6px;border-radius:50%;background:var(--danger);box-shadow:0 0 6px var(--danger);animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
 
@@ -50,13 +51,19 @@ body{display:flex;flex-direction:column}
 .card-header{display:flex;align-items:center;gap:6px;margin-bottom:12px;font-size:12px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px}
 .card-header::before{content:'';width:4px;height:12px;background:var(--accent);border-radius:4px}
 
+/* ERROR BANNER */
+.error-banner{display:none;align-items:center;justify-content:space-between;gap:12px;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.4);color:#fca5a5;padding:10px 14px;border-radius:12px;font-size:12px;font-weight:600}
+.error-banner.show{display:flex}
+.error-banner button{background:var(--danger);color:#fff;border:none;padding:6px 12px;border-radius:8px;font-weight:700;font-size:11px;cursor:pointer}
+.error-banner button:active{transform:scale(0.96)}
+
 .hero-grid{display:grid;grid-template-columns:1fr;gap:12px}
 .hero-time{display:flex;flex-direction:column;justify-content:center}
 .time-clock{font-size:48px;font-weight:900;line-height:1;letter-spacing:-1px;font-variant-numeric:tabular-nums;background:linear-gradient(to right,#fff,var(--text-secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .time-date{font-size:13px;color:var(--text-secondary);margin-top:4px;font-weight:500}
 .hero-weather{display:flex;align-items:center;justify-content:space-between;background:rgba(15,23,42,0.5);padding:12px;border-radius:12px}
 .weather-temp{display:flex;align-items:flex-start}
-.weather-temp .val{font-size:36px;font-weight:800;line-height:1}
+.weather-temp .val{font-size:36px;font-weight:800;line-height:1;transition:color .3s}
 .weather-temp .unit{font-size:16px;color:var(--text-secondary);margin-top:2px}
 .weather-info{display:flex;flex-direction:column;gap:2px}
 .weather-desc{font-size:13px;font-weight:600;color:var(--text-primary)}
@@ -70,32 +77,41 @@ body{display:flex;flex-direction:column}
 .metric-val small{font-size:11px;color:var(--text-muted);font-weight:600}
 
 .aqi-box{grid-column:1 / -1;display:flex;align-items:center;justify-content:space-between;padding:12px 16px}
+.aqi-cat{font-size:10px;font-weight:800;letter-spacing:0.4px;margin-top:3px;transition:color .3s}
 .aqi-bar-container{flex:1;margin-left:16px;height:6px;background:#334155;border-radius:4px;position:relative}
-.aqi-bar-fill{position:absolute;top:0;left:0;height:100%;border-radius:4px;background:linear-gradient(90deg,var(--success),var(--warning),var(--danger))}
-.aqi-marker{position:absolute;top:-4px;width:14px;height:14px;background:#fff;border-radius:50%;box-shadow:0 0 6px rgba(0,0,0,0.5);border:2px solid var(--surface);transform:translateX(-50%)}
+.aqi-bar-fill{position:absolute;top:0;left:0;height:100%;border-radius:4px;background:linear-gradient(90deg,var(--success),#84cc16,var(--warning),var(--danger),#a855f7)}
+.aqi-marker{position:absolute;top:-4px;width:14px;height:14px;background:#fff;border-radius:50%;box-shadow:0 0 6px rgba(0,0,0,0.5);border:2px solid var(--surface);transform:translateX(-50%);transition:left .5s ease}
 
 .info-row{display:flex;gap:12px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
 .info-row::-webkit-scrollbar{display:none}
-.info-item{flex:0 0 auto;background:rgba(15,23,42,0.4);padding:10px 16px;border-radius:12px;text-align:center;min-width:80px;border:1px solid transparent}
+.info-item{flex:0 0 auto;background:rgba(15,23,42,0.4);padding:10px 16px;border-radius:12px;text-align:center;min-width:80px;border:1px solid transparent;transition:background .3s,border-color .3s}
 .info-item.active{background:rgba(14,165,233,0.15);border-color:rgba(14,165,233,0.3)}
 .info-label{font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;margin-bottom:4px}
 .info-item.active .info-label{color:var(--accent-light)}
 .info-val{font-size:14px;font-weight:800;color:var(--text-primary)}
 .info-item.active .info-val{color:var(--accent-light)}
+.info-sub{font-size:9px;color:var(--accent-light);font-weight:700;margin-top:3px;height:11px;letter-spacing:0.3px}
 
-.chart-container{width:100%;height:80px;position:relative}
+.chart-container{width:100%;height:100px;position:relative}
 .chart-svg{width:100%;height:100%;display:block;overflow:visible}
 .chart-tooltip{font-size:10px;fill:var(--text-secondary);font-weight:600}
+.chart-hr{font-size:9px;fill:var(--text-muted);font-weight:600}
 
 .ticker-row{display:flex;align-items:center;height:32px;overflow:hidden;border-bottom:1px solid var(--border);position:relative}
 .ticker-row:last-child{border-bottom:none}
 .ticker-label-static{position:absolute;left:0;top:0;height:100%;padding:0 12px;background:var(--surface);display:flex;align-items:center;font-size:10px;font-weight:800;color:var(--accent-light);z-index:2;box-shadow:4px 0 8px rgba(30,41,59,0.9)}
 .ticker-content{display:flex;gap:32px;white-space:nowrap;padding-left:100px;will-change:transform;animation:scrollLeft 40s linear infinite}
-.ticker-row:hover .ticker-content{animation-play-state:paused}
+.ticker-row:hover .ticker-content,.ticker-row.paused .ticker-content{animation-play-state:paused}
 @keyframes scrollLeft{0%{transform:translate3d(0,0,0)}100%{transform:translate3d(-100%,0,0)}}
 .t-item{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600}
 .t-val{font-weight:800}
 .tk-news-tag{background:var(--accent);color:#fff;font-size:9px;padding:2px 6px;border-radius:4px;font-weight:800;margin-right:6px}
+
+@media (max-width:380px){
+  .time-clock{font-size:40px}
+  .weather-temp .val{font-size:30px}
+  .weather-icon{font-size:30px}
+}
 
 @media (min-width: 768px) and (orientation: landscape) {
   .main-content{flex-direction:row;align-items:stretch;overflow-y:hidden}
@@ -119,16 +135,21 @@ body{display:flex;flex-direction:column}
     <div class="brand-logo">📡</div>
     <div class="brand-text">
       <span class="brand-name">REALTIME DASHBOARD</span>
-      <span class="brand-ver" id="ver">v6.1.0</span>
+      <span class="brand-ver" id="ver">v6.2.0</span>
     </div>
   </div>
   <div class="header-actions">
-    <div class="badge badge-sync" id="countdown">⟳ 5:00</div>
+    <div class="badge badge-sync" id="countdown" onclick="forceRefresh()" title="Tap untuk refresh">⟳ --:--</div>
     <div class="badge badge-live"><span class="dot"></span>LIVE</div>
   </div>
 </header>
 
 <main class="main-content">
+  <div class="error-banner" id="errorBanner">
+    <span id="errText">⚠️ Gagal memuat data. Cek koneksi.</span>
+    <button onclick="forceRefresh()">Coba Lagi</button>
+  </div>
+
   <div class="col-left">
     <div class="card">
       <div class="hero-grid">
@@ -161,12 +182,12 @@ body{display:flex;flex-direction:column}
     <div class="card">
       <div class="card-header">Jadwal Waktu Sholat</div>
       <div class="info-row">
-        <div class="info-item" id="cImsak"><div class="info-label">Imsak</div><div class="info-val" id="pImsak">--:--</div></div>
-        <div class="info-item" id="cSubuh"><div class="info-label">Subuh</div><div class="info-val" id="pSubuh">--:--</div></div>
-        <div class="info-item" id="cDzuhur"><div class="info-label">Dzuhur</div><div class="info-val" id="pDzuhur">--:--</div></div>
-        <div class="info-item" id="cAshar"><div class="info-label">Ashar</div><div class="info-val" id="pAshar">--:--</div></div>
-        <div class="info-item" id="cMaghrib"><div class="info-label">Maghrib</div><div class="info-val" id="pMaghrib">--:--</div></div>
-        <div class="info-item" id="cIsya"><div class="info-label">Isya</div><div class="info-val" id="pIsya">--:--</div></div>
+        <div class="info-item" id="cImsak"><div class="info-label">Imsak</div><div class="info-val" id="pImsak">--:--</div><div class="info-sub"></div></div>
+        <div class="info-item" id="cSubuh"><div class="info-label">Subuh</div><div class="info-val" id="pSubuh">--:--</div><div class="info-sub"></div></div>
+        <div class="info-item" id="cDzuhur"><div class="info-label">Dzuhur</div><div class="info-val" id="pDzuhur">--:--</div><div class="info-sub"></div></div>
+        <div class="info-item" id="cAshar"><div class="info-label">Ashar</div><div class="info-val" id="pAshar">--:--</div><div class="info-sub"></div></div>
+        <div class="info-item" id="cMaghrib"><div class="info-label">Maghrib</div><div class="info-val" id="pMaghrib">--:--</div><div class="info-sub"></div></div>
+        <div class="info-item" id="cIsya"><div class="info-label">Isya</div><div class="info-val" id="pIsya">--:--</div><div class="info-sub"></div></div>
       </div>
     </div>
 
@@ -178,7 +199,11 @@ body{display:flex;flex-direction:column}
         <div class="metric-box"><div class="metric-label">🧭 Tekanan Udara</div><div class="metric-val" id="press">--<small>hPa</small></div></div>
         <div class="metric-box"><div class="metric-label">🔆 Indeks UV</div><div class="metric-val" id="uv">--</div></div>
         <div class="metric-box aqi-box">
-          <div><div class="metric-label">🇪🇺 Indeks AQI</div><div class="metric-val" id="aqi">--</div></div>
+          <div>
+            <div class="metric-label">🇪🇺 Indeks AQI</div>
+            <div class="metric-val" id="aqi">--</div>
+            <div class="aqi-cat" id="aqiCat">—</div>
+          </div>
           <div class="aqi-bar-container">
             <div class="aqi-bar-fill" style="width:100%"></div>
             <div class="aqi-marker" id="aqiMarker" style="left:0%"></div>
@@ -188,55 +213,78 @@ body{display:flex;flex-direction:column}
     </div>
 
     <div class="card">
-      <div class="card-header">Grafik Suhu (24 Jam)</div>
+      <div class="card-header">Grafik Suhu (12 Jam)</div>
       <div class="chart-container"><svg class="chart-svg" id="tempChart" preserveAspectRatio="none"></svg></div>
     </div>
   </div>
 </main>
 
 <footer class="footer-tickers">
-  <div class="ticker-row">
+  <div class="ticker-row" id="rowEco">
     <div class="ticker-label-static">EKONOMI</div>
     <div class="ticker-content" id="tickerEco" style="animation-duration:50s">Memuat data pasar...</div>
   </div>
-  <div class="ticker-row">
+  <div class="ticker-row" id="rowNews">
     <div class="ticker-label-static">BERITA</div>
     <div class="ticker-content" id="tickerNews" style="animation-duration:70s">Memuat berita terkini...</div>
   </div>
 </footer>
 
 <script>
-const VERSION='6.1.0';
+const VERSION='6.2.0';
 const REFRESH_SEC=300;
 const FALLBACK={lat:-6.2088,lon:106.8456};
 document.getElementById('ver').textContent='v'+VERSION;
 
-// SERVICE WORKER REGISTRATION
+// SERVICE WORKER
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js').catch(e => console.warn('SW gagal:', e));
   });
 }
 
-// CLOCK & CALENDAR
+// ============ SYNC COUNTDOWN ============
+let lastSync = 0;
+function updateCountdown(){
+  const el = document.getElementById('countdown');
+  if(!lastSync){ el.textContent = '⟳ --:--'; return; }
+  const elapsed = Math.floor((Date.now() - lastSync)/1000);
+  const remain = Math.max(0, REFRESH_SEC - elapsed);
+  if(remain <= 0){ el.textContent = '⟳ sekarang'; return; }
+  const mm = Math.floor(remain/60);
+  const ss = String(remain%60).padStart(2,'0');
+  el.textContent = '⟳ ' + mm + ':' + ss;
+}
+setInterval(updateCountdown, 1000);
+updateCountdown();
+
+// ============ ERROR BANNER ============
+function showError(msg){
+  document.getElementById('errText').textContent = '⚠️ ' + msg;
+  document.getElementById('errorBanner').classList.add('show');
+}
+function hideError(){
+  document.getElementById('errorBanner').classList.remove('show');
+}
+
+// ============ CLOCK & CALENDAR ============
 function tick(){
   const n=new Date();
   document.getElementById('clock').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')+':'+String(n.getSeconds()).padStart(2,'0');
   const d=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
   const m=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-  const dateStr=d[n.getDay()]+', '+n.getDate()+' '+m[n.getMonth()]+' '+n.getFullYear();
-  document.getElementById('date').textContent=dateStr;
+  document.getElementById('date').textContent=d[n.getDay()]+', '+n.getDate()+' '+m[n.getMonth()]+' '+n.getFullYear();
   document.getElementById('calMas').textContent=n.getDate()+' '+m[n.getMonth()].substring(0,3);
 }
 setInterval(tick,1000);tick();
 
-// HIJRI & WETON CALENDAR
 function renderCalendar(){
   const now=new Date();
   const dayIdx=now.getDay();
   const pasaran=['Legi','Pahing','Pon','Wage','Kliwon'];
   const wetonNames=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-  // 1 Januari 2000 = Sabtu Pahing (base pasaran index 1)
+  const neptuHari=[5,4,3,7,8,6,9]; // Minggu..Sabtu
+  const neptuPas=[5,9,7,4,8]; // Legi,Pahing,Pon,Wage,Kliwon
   const base=new Date(2000,0,1);
   const basePas=1;
   const diff=Math.floor((now-base)/86400000);
@@ -245,32 +293,78 @@ function renderCalendar(){
   let hijri='--';
   try{
     hijri=new Intl.DateTimeFormat('id-ID-u-ca-islamic-umalqura',{day:'numeric',month:'short',year:'numeric'}).format(now);
-  }catch(e){
-    hijri=(now.getDate())+' Hijriah';
-  }
+  }catch(e){ hijri=now.getDate()+' Hijriah'; }
+  const neptu = neptuHari[dayIdx] + neptuPas[pasIdx];
   document.getElementById('calHijri').textContent=hijri;
-  document.getElementById('calWeton').textContent=wetonNames[dayIdx]+' '+pasaran[pasIdx];
+  document.getElementById('calWeton').textContent=wetonNames[dayIdx]+' '+pasaran[pasIdx]+' · '+neptu;
 }
 renderCalendar();
 
-// PRAYER TIMES
-const PRAYER_TIMES={imsak:'04:09',subuh:'04:19',dzuhur:'11:44',ashar:'14:45',maghrib:'17:49',isya:'18:58'};
+// ============ PRAYER TIMES ============
+let PRAYER_TIMES={Imsak:'04:09',Subuh:'04:19',Dzuhur:'11:44',Ashar:'14:45',Maghrib:'17:49',Isya:'18:58'};
 const prayerIds=['Imsak','Subuh','Dzuhur','Ashar','Maghrib','Isya'];
-prayerIds.forEach(id=>{document.getElementById('p'+id).textContent=PRAYER_TIMES[id.toLowerCase()];});
+
+function setPrayerDisplay(){
+  prayerIds.forEach(id=>{document.getElementById('p'+id).textContent=PRAYER_TIMES[id];});
+}
+setPrayerDisplay();
+
+function toMin(t){const[h,m]=String(t).split(':').map(Number);return h*60+m;}
 
 function updatePrayerActive(){
-  const now=new Date();const cur=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
-  let active=null;
-  for(const k of prayerIds){if(cur>=PRAYER_TIMES[k.toLowerCase()])active=k;}
+  const now=new Date();
+  const curMin = now.getHours()*60 + now.getMinutes();
+  let active=null, next=null, nextDiff=0;
+
+  for(const k of prayerIds){
+    if(curMin >= toMin(PRAYER_TIMES[k])) active=k;
+  }
+  for(const k of prayerIds){
+    const d = toMin(PRAYER_TIMES[k]) - curMin;
+    if(d > 0){ next=k; nextDiff=d; break; }
+  }
+  // kalau semua sudah lewat, next = Imsak besok
+  if(!next){ next='Imsak'; nextDiff = (24*60 - curMin) + toMin(PRAYER_TIMES['Imsak']); }
+
   prayerIds.forEach(id=>{
     const el=document.getElementById('c'+id);
-    if(el)el.classList.toggle('active',id===active);
+    if(!el) return;
+    el.classList.toggle('active', id===active);
+    const sub = el.querySelector('.info-sub');
+    if(!sub) return;
+    if(id===next){
+      const hh=Math.floor(nextDiff/60), mm=nextDiff%60;
+      sub.textContent = hh>0 ? `${hh}j ${mm}m lagi` : `${mm}m lagi`;
+    } else {
+      sub.textContent = '';
+    }
   });
 }
-setInterval(updatePrayerActive,60000);updatePrayerActive();
+setInterval(updatePrayerActive,30000);updatePrayerActive();
 
-// WEATHER & AQI
-const WMO={0:['Cerah','☀️'],1:['Seb.Cerah','🌤️'],2:['Berawan','⛅'],3:['Mendung','☁️'],45:['Kabut','🌫️'],61:['Gerimis','🌦️'],63:['Hujan Sdg','🌧️'],65:['Hujan Lbt','🌧️'],95:['Badai Petir','⛈️']};
+async function fetchPrayer(lat,lon){
+  try{
+    const url=`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=20`;
+    const r=await fetchT(url,7000);
+    const j=await r.json();
+    const t=j && j.data && j.data.timings;
+    if(!t) return;
+    const clean=s=>String(s).replace(/\s*\(.*\)/,'').trim();
+    PRAYER_TIMES={
+      Imsak: clean(t.Imsak),
+      Subuh: clean(t.Fajr),
+      Dzuhur: clean(t.Dhuhr),
+      Ashar: clean(t.Asr),
+      Maghrib: clean(t.Maghrib),
+      Isya: clean(t.Isha)
+    };
+    setPrayerDisplay();
+    updatePrayerActive();
+  }catch(e){ console.warn('Prayer API gagal:',e); }
+}
+
+// ============ WEATHER & AQI ============
+const WMO={0:['Cerah','☀️'],1:['Seb.Cerah','🌤️'],2:['Berawan','⛅'],3:['Mendung','☁️'],45:['Kabut','🌫️'],48:['Kabut Beku','🌫️'],51:['Gerimis Ringan','🌦️'],53:['Gerimis','🌦️'],55:['Gerimis Lbt','🌦️'],61:['Hujan Ringan','🌧️'],63:['Hujan Sdg','🌧️'],65:['Hujan Lbt','🌧️'],71:['Salju','🌨️'],80:['Hujan Lokal','🌦️'],95:['Badai Petir','⛈️']};
 const wi=c=>WMO[c]||['Normal','⛅'];
 
 function fetchT(url,ms){
@@ -289,14 +383,21 @@ function getLoc(){
   });
 }
 
+async function fetchPlaceName(lat,lon){
+  try{
+    const r=await fetchT(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&zoom=10&accept-language=id`,6000);
+    const j=await r.json();
+    const a=j.address||{};
+    return a.city || a.town || a.village || a.municipality || a.county || a.state || (lat.toFixed(2)+', '+lon.toFixed(2));
+  }catch(e){ return lat.toFixed(2)+', '+lon.toFixed(2); }
+}
+
 async function fetchWeather(lat,lon){
   const p=new URLSearchParams({
-    latitude:lat,
-    longitude:lon,
+    latitude:lat,longitude:lon,
     current:'temperature_2m,relative_humidity_2m,weather_code,pressure_msl,wind_speed_10m',
     hourly:'temperature_2m,uv_index',
-    timezone:'auto',
-    forecast_days:2
+    timezone:'auto',forecast_days:2
   });
   const r=await fetchT('https://api.open-meteo.com/v1/forecast?'+p,7000);
   return r.json();
@@ -307,12 +408,31 @@ async function fetchAQI(lat,lon){
   return r.json();
 }
 
+function aqiCategory(v){
+  if(v<=20) return ['BAIK','#10b981'];
+  if(v<=40) return ['CUKUP BAIK','#84cc16'];
+  if(v<=60) return ['SEDANG','#f59e0b'];
+  if(v<=80) return ['BURUK','#ef4444'];
+  if(v<=100) return ['SANGAT BURUK','#a855f7'];
+  return ['EKSTREM','#dc2626'];
+}
+
 let coords=null;
+let placeNameCached=null;
+
 async function refreshDashboard(){
   if(!coords) coords=await getLoc();
   try{
-    document.getElementById('loc').textContent=coords.lat.toFixed(2)+', '+coords.lon.toFixed(2);
-    const[w,aq]=await Promise.all([fetchWeather(coords.lat,coords.lon),fetchAQI(coords.lat,coords.lon)]);
+    if(!placeNameCached){
+      placeNameCached = await fetchPlaceName(coords.lat, coords.lon);
+      document.getElementById('loc').textContent = placeNameCached;
+      fetchPrayer(coords.lat, coords.lon);
+    }
+
+    const[w,aq]=await Promise.all([
+      fetchWeather(coords.lat,coords.lon),
+      fetchAQI(coords.lat,coords.lon)
+    ]);
 
     const c=w.current,wInfo=wi(c.weather_code);
     document.getElementById('temp').textContent=Math.round(c.temperature_2m);
@@ -322,7 +442,6 @@ async function refreshDashboard(){
     document.getElementById('wind').innerHTML=Number(c.wind_speed_10m).toFixed(1)+'<small>km/j</small>';
     document.getElementById('press').innerHTML=Math.round(c.pressure_msl)+'<small>hPa</small>';
 
-    // UV dari hourly
     const nowMs=Date.now();
     let uvIdx=0;
     if(w.hourly && w.hourly.time){
@@ -334,46 +453,102 @@ async function refreshDashboard(){
     const uvVal=(w.hourly && w.hourly.uv_index)?w.hourly.uv_index[uvIdx]:0;
     document.getElementById('uv').textContent=Number(uvVal||0).toFixed(1);
 
-    // AQI
+    // AQI + kategori
     const aqiVal=(aq && aq.current && aq.current.european_aqi)||0;
     document.getElementById('aqi').textContent=aqiVal;
+    const [cat,catColor]=aqiCategory(aqiVal);
+    const catEl=document.getElementById('aqiCat');
+    catEl.textContent=cat;
+    catEl.style.color=catColor;
     document.getElementById('aqiMarker').style.left=Math.min(96,Math.max(0,(aqiVal/100)*100))+'%';
 
     if(w.hourly) renderChart(w.hourly);
-  }catch(e){console.warn('Refresh gagal:',e);}
+
+    lastSync = Date.now();
+    updateCountdown();
+    hideError();
+  }catch(e){
+    console.warn('Refresh gagal:',e);
+    showError('Gagal memuat data. Cek koneksi.');
+  }
+}
+
+function forceRefresh(){
+  lastSync = 0;
+  placeNameCached = null;
+  updateCountdown();
+  refreshDashboard();
 }
 
 function renderChart(hourly){
   const svg=document.getElementById('tempChart');
   const rect=svg.getBoundingClientRect();
-  const w=rect.width||300, h=rect.height||80;
+  const w=rect.width||300, h=rect.height||100;
+  const padTop=16, padBot=14;
+  const chartH = h - padTop - padBot;
+
   const now=Date.now();
   let startIdx=0;
   for(let i=0;i<hourly.time.length;i++){
     if(new Date(hourly.time[i]).getTime()>now-3600000){startIdx=i;break;}
   }
   const pts=hourly.temperature_2m.slice(startIdx,startIdx+12);
+  const times=hourly.time.slice(startIdx,startIdx+12);
   if(pts.length<2)return;
-  const min=Math.min(...pts), max=Math.max(...pts), range=(max-min)||1;
-  const padY=20;
 
-  let path='';let texts='';let maxDone=false,minDone=false;
+  const min=Math.min(...pts), max=Math.max(...pts), range=(max-min)||1;
+
+  let path='',fill='';
+  let maxDone=false,minDone=false;
+  let texts='';
+
   pts.forEach((val,i)=>{
     const x=(i/(pts.length-1))*w;
-    const y=padY+(1-(val-min)/range)*(h-(padY*2));
+    const y=padTop+(1-(val-min)/range)*chartH;
     path+=(i===0?'M':'L')+x.toFixed(1)+','+y.toFixed(1);
-    if(val===max&&!maxDone){texts+=`<text x="${Math.max(4,Math.min(x-10,w-20))}" y="${Math.max(12,y-6)}" class="chart-tooltip">${Math.round(val)}°</text>`;maxDone=true;}
-    if(val===min&&!minDone){texts+=`<text x="${Math.max(4,Math.min(x-10,w-20))}" y="${Math.min(h-2,y+14)}" class="chart-tooltip">${Math.round(val)}°</text>`;minDone=true;}
+    if(i===0) fill = `M${x.toFixed(1)},${(padTop+chartH).toFixed(1)} L${x.toFixed(1)},${y.toFixed(1)}`;
+    else fill += ` L${x.toFixed(1)},${y.toFixed(1)}`;
+    if(val===max&&!maxDone){texts+=`<text x="${Math.max(4,Math.min(x-10,w-24))}" y="${Math.max(10,y-6)}" class="chart-tooltip">${Math.round(val)}°</text>`;maxDone=true;}
+    if(val===min&&!minDone){texts+=`<text x="${Math.max(4,Math.min(x-10,w-24))}" y="${Math.min(h-padBot-2,y+13)}" class="chart-tooltip">${Math.round(val)}°</text>`;minDone=true;}
   });
+  fill += ` L${w},${(padTop+chartH).toFixed(1)} Z`;
 
-  svg.innerHTML=`<path d="${path}" fill="none" stroke="var(--accent-light)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>${texts}`;
+  // Label jam bawah (4 titik)
+  const step = Math.max(1, Math.floor((pts.length-1)/3));
+  for(let i=0;i<pts.length;i+=step){
+    const x=(i/(pts.length-1))*w;
+    const hh=new Date(times[i]).getHours().toString().padStart(2,'0');
+    const anchor = i===0 ? 'start' : (i>=pts.length-2 ? 'end' : 'middle');
+    const xAdj = i===0 ? x+2 : (i>=pts.length-2 ? x-2 : x);
+    texts += `<text x="${xAdj}" y="${h-2}" text-anchor="${anchor}" class="chart-hr">${hh}</text>`;
+  }
+
+  // Titik akhir
+  const lastX=w, lastY=padTop+(1-(pts[pts.length-1]-min)/range)*chartH;
+
+  svg.innerHTML=`
+    <defs>
+      <linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="var(--accent-light)" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="var(--accent-light)" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <path d="${fill}" fill="url(#chartFill)" stroke="none"/>
+    <path d="${path}" fill="none" stroke="var(--accent-light)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="${lastX}" cy="${lastY}" r="4" fill="var(--accent-light)"/>
+    ${texts}
+  `;
 }
 
 refreshDashboard();
 setInterval(refreshDashboard,REFRESH_SEC*1000);
-window.addEventListener('resize',()=>setTimeout(refreshDashboard,500));
+window.addEventListener('resize',()=>setTimeout(()=>{ if(window._lastHourly) renderChart(window._lastHourly); },500));
 
-// TICKERS
+// Simpan hourly untuk resize redraw
+const _origRender = renderChart;
+renderChart = function(h){ window._lastHourly = h; _origRender(h); };
+
+// ============ TICKERS ============
 async function updateTickers(){
   try{
     const[rUsd,rCrypto,rNews]=await Promise.all([
@@ -382,13 +557,18 @@ async function updateTickers(){
       fetchT('https://api.rss2json.com/v1/api.json?rss_url=https://www.cnbcindonesia.com/news/rss',6000).then(r=>r.json()).catch(()=>null)
     ]);
 
+    const updTime = new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
     let ecoHtml='';
     const usd=(rUsd&&rUsd.rates&&rUsd.rates.IDR)?Math.round(rUsd.rates.IDR).toLocaleString('id-ID'):'15.800';
     const btc=(rCrypto&&rCrypto.bitcoin)?rCrypto.bitcoin.usd.toLocaleString():'--';
     const eth=(rCrypto&&rCrypto.ethereum)?rCrypto.ethereum.usd.toLocaleString():'--';
     const ecoData=[
-      {i:'💵',l:'USD/IDR',v:'Rp'+usd},{i:'₿',l:'BTC',v:'$'+btc},{i:'⟠',l:'ETH',v:'$'+eth},
-      {i:'⛽',l:'Pertamax',v:'Rp12.100'},{i:'🛢️',l:'Pertalite',v:'Rp10.000'}
+      {i:'🕒',l:'Update',v:updTime},
+      {i:'💵',l:'USD/IDR',v:'Rp'+usd},
+      {i:'₿',l:'BTC',v:'$'+btc},
+      {i:'⟠',l:'ETH',v:'$'+eth},
+      {i:'⛽',l:'Pertamax',v:'Rp12.100'},
+      {i:'🛢️',l:'Pertalite',v:'Rp10.000'}
     ];
     for(let i=0;i<4;i++){
       ecoData.forEach(d=>{ecoHtml+=`<div class="t-item"><span style="font-size:14px">${d.i}</span><span style="color:var(--text-secondary)">${d.l}</span><span class="t-val">${d.v}</span></div>`;});
@@ -408,7 +588,13 @@ async function updateTickers(){
 updateTickers();
 setInterval(updateTickers,300000);
 
-// AUTO UPDATE
+// Tap ticker untuk pause
+['rowEco','rowNews'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el) el.addEventListener('click',()=>el.classList.toggle('paused'));
+});
+
+// ============ AUTO UPDATE ============
 async function checkVersion(){
   try{
     const r=await fetch('version.txt?t='+Date.now(),{cache:'no-store'});
