@@ -30,12 +30,10 @@
 html,body{height:100%;width:100%;overflow:hidden;background:var(--bg-main);color:var(--text-primary)}
 body{display:flex;flex-direction:column}
 
-/* --- LAYOUT UTAMA --- */
 .header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--bg-main);z-index:10;border-bottom:1px solid var(--border);flex-shrink:0}
 .main-content{flex:1;overflow-y:auto;overflow-x:hidden;padding:16px;display:flex;flex-direction:column;gap:16px;scroll-behavior:smooth}
 .footer-tickers{flex-shrink:0;background:var(--surface);border-top:1px solid var(--border);display:flex;flex-direction:column;z-index:10}
 
-/* --- HEADER --- */
 .brand{display:flex;align-items:center;gap:10px}
 .brand-logo{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--accent),#2563eb);display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 4px 10px rgba(14,165,233,0.3)}
 .brand-text{display:flex;flex-direction:column}
@@ -48,12 +46,10 @@ body{display:flex;flex-direction:column}
 .dot{width:6px;height:6px;border-radius:50%;background:var(--danger);box-shadow:0 0 6px var(--danger);animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
 
-/* --- CARD BERSAMA --- */
 .card{background:var(--surface);border-radius:16px;border:1px solid var(--border);padding:16px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -2px rgba(0,0,0,0.1)}
 .card-header{display:flex;align-items:center;gap:6px;margin-bottom:12px;font-size:12px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px}
 .card-header::before{content:'';width:4px;height:12px;background:var(--accent);border-radius:4px}
 
-/* --- HERO (WAKTU & CUACA) --- */
 .hero-grid{display:grid;grid-template-columns:1fr;gap:12px}
 .hero-time{display:flex;flex-direction:column;justify-content:center}
 .time-clock{font-size:48px;font-weight:900;line-height:1;letter-spacing:-1px;font-variant-numeric:tabular-nums;background:linear-gradient(to right,#fff,var(--text-secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
@@ -67,20 +63,17 @@ body{display:flex;flex-direction:column}
 .weather-loc{font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:4px}
 .weather-icon{font-size:36px;line-height:1;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.4))}
 
-/* --- METRIK GRID (HP: 2 Kolom) --- */
 .metrics-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .metric-box{background:rgba(15,23,42,0.4);padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.02)}
 .metric-label{font-size:11px;color:var(--text-secondary);font-weight:600;margin-bottom:4px}
 .metric-val{font-size:18px;font-weight:800;display:flex;align-items:baseline;gap:2px}
 .metric-val small{font-size:11px;color:var(--text-muted);font-weight:600}
 
-/* --- AQI SPECIAL --- */
 .aqi-box{grid-column:1 / -1;display:flex;align-items:center;justify-content:space-between;padding:12px 16px}
 .aqi-bar-container{flex:1;margin-left:16px;height:6px;background:#334155;border-radius:4px;position:relative}
 .aqi-bar-fill{position:absolute;top:0;left:0;height:100%;border-radius:4px;background:linear-gradient(90deg,var(--success),var(--warning),var(--danger))}
 .aqi-marker{position:absolute;top:-4px;width:14px;height:14px;background:#fff;border-radius:50%;box-shadow:0 0 6px rgba(0,0,0,0.5);border:2px solid var(--surface);transform:translateX(-50%)}
 
-/* --- JADWAL SHOLAT & CALENDAR --- */
 .info-row{display:flex;gap:12px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
 .info-row::-webkit-scrollbar{display:none}
 .info-item{flex:0 0 auto;background:rgba(15,23,42,0.4);padding:10px 16px;border-radius:12px;text-align:center;min-width:80px;border:1px solid transparent}
@@ -90,12 +83,10 @@ body{display:flex;flex-direction:column}
 .info-val{font-size:14px;font-weight:800;color:var(--text-primary)}
 .info-item.active .info-val{color:var(--accent-light)}
 
-/* --- CHART --- */
 .chart-container{width:100%;height:80px;position:relative}
 .chart-svg{width:100%;height:100%;display:block;overflow:visible}
 .chart-tooltip{font-size:10px;fill:var(--text-secondary);font-weight:600}
 
-/* --- TICKERS (BOTTOM FIXED) --- */
 .ticker-row{display:flex;align-items:center;height:32px;overflow:hidden;border-bottom:1px solid var(--border);position:relative}
 .ticker-row:last-child{border-bottom:none}
 .ticker-label-static{position:absolute;left:0;top:0;height:100%;padding:0 12px;background:var(--surface);display:flex;align-items:center;font-size:10px;font-weight:800;color:var(--accent-light);z-index:2;box-shadow:4px 0 8px rgba(30,41,59,0.9)}
@@ -104,10 +95,10 @@ body{display:flex;flex-direction:column}
 @keyframes scrollLeft{0%{transform:translate3d(0,0,0)}100%{transform:translate3d(-100%,0,0)}}
 .t-item{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600}
 .t-val{font-weight:800}
+.tk-news-tag{background:var(--accent);color:#fff;font-size:9px;padding:2px 6px;border-radius:4px;font-weight:800;margin-right:6px}
 
-/* --- TABLET MATEPAD SE 10.4 (LANDSCAPE OPTIMIZATION) --- */
 @media (min-width: 768px) and (orientation: landscape) {
-  .main-content{flex-direction:row;align-items:stretch;overflow-y:hidden} /* Kunci grid mati scroll di tablet */
+  .main-content{flex-direction:row;align-items:stretch;overflow-y:hidden}
   .col-left{flex:0 0 380px;display:flex;flex-direction:column;gap:16px}
   .col-right{flex:1;display:flex;flex-direction:column;gap:16px}
   .hero-grid{grid-template-columns:1fr}
@@ -116,7 +107,7 @@ body{display:flex;flex-direction:column}
   .weather-icon{font-size:48px}
   .metrics-grid{grid-template-columns:repeat(3,1fr);flex:1}
   .chart-container{flex:1;min-height:150px}
-  .info-item{flex:1;min-width:0} /* Sholat otomatis fit lebar container */
+  .info-item{flex:1;min-width:0}
   .info-row{flex-wrap:wrap;overflow-x:hidden}
 }
 </style>
@@ -128,7 +119,7 @@ body{display:flex;flex-direction:column}
     <div class="brand-logo">📡</div>
     <div class="brand-text">
       <span class="brand-name">REALTIME DASHBOARD</span>
-      <span class="brand-ver" id="ver">v6.0.5</span>
+      <span class="brand-ver" id="ver">v6.1.0</span>
     </div>
   </div>
   <div class="header-actions">
@@ -138,7 +129,6 @@ body{display:flex;flex-direction:column}
 </header>
 
 <main class="main-content">
-  <!-- BAGIAN KIRI PADA TABLET / ATAS PADA HP -->
   <div class="col-left">
     <div class="card">
       <div class="hero-grid">
@@ -167,7 +157,6 @@ body{display:flex;flex-direction:column}
     </div>
   </div>
 
-  <!-- BAGIAN KANAN PADA TABLET / BAWAH PADA HP -->
   <div class="col-right">
     <div class="card">
       <div class="card-header">Jadwal Waktu Sholat</div>
@@ -217,10 +206,17 @@ body{display:flex;flex-direction:column}
 </footer>
 
 <script>
-const VERSION='6.0.5';
+const VERSION='6.1.0';
 const REFRESH_SEC=300;
 const FALLBACK={lat:-6.2088,lon:106.8456};
 document.getElementById('ver').textContent='v'+VERSION;
+
+// SERVICE WORKER REGISTRATION
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(e => console.warn('SW gagal:', e));
+  });
+}
 
 // CLOCK & CALENDAR
 function tick(){
@@ -234,15 +230,25 @@ function tick(){
 }
 setInterval(tick,1000);tick();
 
-// JAVANESE WETON CALCULATION
+// HIJRI & WETON CALENDAR
 function renderCalendar(){
-  const now=new Date();const dayIdx=now.getDay();
+  const now=new Date();
+  const dayIdx=now.getDay();
   const pasaran=['Legi','Pahing','Pon','Wage','Kliwon'];
   const wetonNames=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-  const base=new Date(2026,9,1);const basePas=0;
+  // 1 Januari 2000 = Sabtu Pahing (base pasaran index 1)
+  const base=new Date(2000,0,1);
+  const basePas=1;
   const diff=Math.floor((now-base)/86400000);
   const pasIdx=((basePas+diff)%5+5)%5;
-  document.getElementById('calHijri').textContent=(now.getDate()+18)+' Rab.Akhir';
+
+  let hijri='--';
+  try{
+    hijri=new Intl.DateTimeFormat('id-ID-u-ca-islamic-umalqura',{day:'numeric',month:'short',year:'numeric'}).format(now);
+  }catch(e){
+    hijri=(now.getDate())+' Hijriah';
+  }
+  document.getElementById('calHijri').textContent=hijri;
   document.getElementById('calWeton').textContent=wetonNames[dayIdx]+' '+pasaran[pasIdx];
 }
 renderCalendar();
@@ -263,7 +269,7 @@ function updatePrayerActive(){
 }
 setInterval(updatePrayerActive,60000);updatePrayerActive();
 
-// WEATHER & AQI LOGIC
+// WEATHER & AQI
 const WMO={0:['Cerah','☀️'],1:['Seb.Cerah','🌤️'],2:['Berawan','⛅'],3:['Mendung','☁️'],45:['Kabut','🌫️'],61:['Gerimis','🌦️'],63:['Hujan Sdg','🌧️'],65:['Hujan Lbt','🌧️'],95:['Badai Petir','⛈️']};
 const wi=c=>WMO[c]||['Normal','⛅'];
 
@@ -284,7 +290,14 @@ function getLoc(){
 }
 
 async function fetchWeather(lat,lon){
-  const p=new URLSearchParams({latitude:lat,longitude:lon,current:'temperature_2m,relative_humidity_2m,weather_code,pressure_msl,wind_speed_10m,uv_index',hourly:'temperature_2m',timezone:'auto',forecast_days:2});
+  const p=new URLSearchParams({
+    latitude:lat,
+    longitude:lon,
+    current:'temperature_2m,relative_humidity_2m,weather_code,pressure_msl,wind_speed_10m',
+    hourly:'temperature_2m,uv_index',
+    timezone:'auto',
+    forecast_days:2
+  });
   const r=await fetchT('https://api.open-meteo.com/v1/forecast?'+p,7000);
   return r.json();
 }
@@ -300,104 +313,107 @@ async function refreshDashboard(){
   try{
     document.getElementById('loc').textContent=coords.lat.toFixed(2)+', '+coords.lon.toFixed(2);
     const[w,aq]=await Promise.all([fetchWeather(coords.lat,coords.lon),fetchAQI(coords.lat,coords.lon)]);
-    
-    // Update Current Weather
+
     const c=w.current,wInfo=wi(c.weather_code);
     document.getElementById('temp').textContent=Math.round(c.temperature_2m);
     document.getElementById('desc').textContent=wInfo[0];
     document.getElementById('wicon').textContent=wInfo[1];
     document.getElementById('hum').innerHTML=c.relative_humidity_2m+'<small>%</small>';
-    document.getElementById('wind').innerHTML=c.wind_speed_10m.toFixed(1)+'<small>km/j</small>';
+    document.getElementById('wind').innerHTML=Number(c.wind_speed_10m).toFixed(1)+'<small>km/j</small>';
     document.getElementById('press').innerHTML=Math.round(c.pressure_msl)+'<small>hPa</small>';
-    document.getElementById('uv').textContent=(c.uv_index||0).toFixed(1);
-    
-    // Update AQI
-    const aqiVal=aq.current.european_aqi||0;
+
+    // UV dari hourly
+    const nowMs=Date.now();
+    let uvIdx=0;
+    if(w.hourly && w.hourly.time){
+      for(let i=0;i<w.hourly.time.length;i++){
+        if(new Date(w.hourly.time[i]).getTime()<=nowMs) uvIdx=i;
+        else break;
+      }
+    }
+    const uvVal=(w.hourly && w.hourly.uv_index)?w.hourly.uv_index[uvIdx]:0;
+    document.getElementById('uv').textContent=Number(uvVal||0).toFixed(1);
+
+    // AQI
+    const aqiVal=(aq && aq.current && aq.current.european_aqi)||0;
     document.getElementById('aqi').textContent=aqiVal;
     document.getElementById('aqiMarker').style.left=Math.min(96,Math.max(0,(aqiVal/100)*100))+'%';
 
-    // Update SVG Chart
-    renderChart(w.hourly);
-  }catch(e){}
+    if(w.hourly) renderChart(w.hourly);
+  }catch(e){console.warn('Refresh gagal:',e);}
 }
 
 function renderChart(hourly){
   const svg=document.getElementById('tempChart');
   const rect=svg.getBoundingClientRect();
   const w=rect.width||300, h=rect.height||80;
-  
-  // Find current hour index
   const now=Date.now();
   let startIdx=0;
   for(let i=0;i<hourly.time.length;i++){
     if(new Date(hourly.time[i]).getTime()>now-3600000){startIdx=i;break;}
   }
-  
   const pts=hourly.temperature_2m.slice(startIdx,startIdx+12);
   if(pts.length<2)return;
   const min=Math.min(...pts), max=Math.max(...pts), range=(max-min)||1;
   const padY=20;
-  
-  let path='';
-  let texts='';
+
+  let path='';let texts='';let maxDone=false,minDone=false;
   pts.forEach((val,i)=>{
     const x=(i/(pts.length-1))*w;
     const y=padY+(1-(val-min)/range)*(h-(padY*2));
     path+=(i===0?'M':'L')+x.toFixed(1)+','+y.toFixed(1);
-    
-    // Label max/min
-    if(val===max&&texts.indexOf('max-lbl')===-1) texts+=`<text x="${Math.max(4,Math.min(x-10,w-20))}" y="${y-6}" class="chart-tooltip" id="max-lbl">${Math.round(val)}°</text>`;
-    if(val===min&&texts.indexOf('min-lbl')===-1) texts+=`<text x="${Math.max(4,Math.min(x-10,w-20))}" y="${y+14}" class="chart-tooltip" id="min-lbl">${Math.round(val)}°</text>`;
+    if(val===max&&!maxDone){texts+=`<text x="${Math.max(4,Math.min(x-10,w-20))}" y="${Math.max(12,y-6)}" class="chart-tooltip">${Math.round(val)}°</text>`;maxDone=true;}
+    if(val===min&&!minDone){texts+=`<text x="${Math.max(4,Math.min(x-10,w-20))}" y="${Math.min(h-2,y+14)}" class="chart-tooltip">${Math.round(val)}°</text>`;minDone=true;}
   });
-  
+
   svg.innerHTML=`<path d="${path}" fill="none" stroke="var(--accent-light)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>${texts}`;
 }
 
 refreshDashboard();
 setInterval(refreshDashboard,REFRESH_SEC*1000);
-window.addEventListener('resize',()=>setTimeout(refreshDashboard,500)); // Redraw chart on rotate
+window.addEventListener('resize',()=>setTimeout(refreshDashboard,500));
 
-// REALTIME TICKERS (Berita & Ekonomi)
+// TICKERS
 async function updateTickers(){
   try{
     const[rUsd,rCrypto,rNews]=await Promise.all([
-      fetchT('https://open.er-api.com/v6/latest/USD',5000).then(res=>res.json()).catch(()=>null),
-      fetchT('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd',5000).then(res=>res.json()).catch(()=>null),
-      fetchT('https://api.rss2json.com/v1/api.json?rss_url=https://www.cnbcindonesia.com/news/rss',6000).then(res=>res.json()).catch(()=>null)
+      fetchT('https://open.er-api.com/v6/latest/USD',5000).then(r=>r.json()).catch(()=>null),
+      fetchT('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd',5000).then(r=>r.json()).catch(()=>null),
+      fetchT('https://api.rss2json.com/v1/api.json?rss_url=https://www.cnbcindonesia.com/news/rss',6000).then(r=>r.json()).catch(()=>null)
     ]);
-    
-    // Build Eco
+
     let ecoHtml='';
     const usd=(rUsd&&rUsd.rates&&rUsd.rates.IDR)?Math.round(rUsd.rates.IDR).toLocaleString('id-ID'):'15.800';
     const btc=(rCrypto&&rCrypto.bitcoin)?rCrypto.bitcoin.usd.toLocaleString():'--';
     const eth=(rCrypto&&rCrypto.ethereum)?rCrypto.ethereum.usd.toLocaleString():'--';
     const ecoData=[
-      {i:'💵',l:'USD/IDR',v:'Rp'+usd}, {i:'₿',l:'BTC',v:'$'+btc}, {i:'⟠',l:'ETH',v:'$'+eth},
-      {i:'⛽',l:'Pertamax',v:'Rp12.100'}, {i:'🛢️',l:'Pertalite',v:'Rp10.000'}
+      {i:'💵',l:'USD/IDR',v:'Rp'+usd},{i:'₿',l:'BTC',v:'$'+btc},{i:'⟠',l:'ETH',v:'$'+eth},
+      {i:'⛽',l:'Pertamax',v:'Rp12.100'},{i:'🛢️',l:'Pertalite',v:'Rp10.000'}
     ];
-    for(let i=0;i<4;i++){ // Duplicate for smooth infinite loop
+    for(let i=0;i<4;i++){
       ecoData.forEach(d=>{ecoHtml+=`<div class="t-item"><span style="font-size:14px">${d.i}</span><span style="color:var(--text-secondary)">${d.l}</span><span class="t-val">${d.v}</span></div>`;});
     }
     document.getElementById('tickerEco').innerHTML=ecoHtml;
-    
-    // Build News
+
     let newsHtml='';
     if(rNews&&rNews.items){
       const topNews=rNews.items.slice(0,8);
-      for(let i=0;i<3;i++){ // Duplicate loop
+      for(let i=0;i<3;i++){
         topNews.forEach(n=>{newsHtml+=`<div class="t-item"><span class="tk-news-tag">TERBARU</span><span style="font-weight:500">${n.title}</span></div>`;});
       }
       document.getElementById('tickerNews').innerHTML=newsHtml;
     }
-  }catch(e){}
+  }catch(e){console.warn('Ticker gagal:',e);}
 }
 updateTickers();
 setInterval(updateTickers,300000);
 
-// Auto-Update PWA
+// AUTO UPDATE
 async function checkVersion(){
-  try{const r=await fetch('version.txt?t='+Date.now(),{cache:'no-store'});const v=(await r.text()).trim();
-    if(v&&!v.includes("<")&&v!==VERSION){location.reload(true);}
+  try{
+    const r=await fetch('version.txt?t='+Date.now(),{cache:'no-store'});
+    const v=(await r.text()).trim();
+    if(v&&!v.includes('<')&&v!==VERSION){location.reload();}
   }catch(e){}
 }
 setInterval(checkVersion,30000);
