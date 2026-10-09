@@ -44,7 +44,7 @@ body{background:var(--bg-1);color:var(--text-1);display:flex;flex-direction:colu
 /* CARD BASE */
 .card{background:var(--surface);border-radius:8px;border:1px solid var(--border);position:relative;overflow:hidden;padding:4px 6px}
 
-/* DASHBOARD MAIN LAYOUT (FLEX CONTAINER UNTUK MEMBAGI TINGGI ROTASI) */
+/* CONTAINER */
 .main-container{display:flex;flex-direction:column;gap:4px;flex:1;min-height:0}
 
 /* HERO ROW */
@@ -117,12 +117,12 @@ body{background:var(--bg-1);color:var(--text-1);display:flex;flex-direction:colu
 .footer{display:flex;justify-content:space-between;align-items:center;font-size:7px;color:var(--text-4);height:14px;flex-shrink:0}
 .status-dot{width:5px;height:5px;border-radius:50%;background:var(--success)}
 
-/* RESPONSIVE LANDSCAPE LAYOUT UNTUK TABLET MATEPAD SE 10.4 */
+/* LAYOUT LANDSCAPE KHUSUS TABLET MATEPAD SE 10.4 */
 @media (min-width: 768px) and (orientation: landscape) {
   body { padding: 8px; gap: 6px; }
   .header { height: 28px; }
   .brand-name { font-size: 13px; }
-  .main-container { display: grid; grid-template-columns: 320px 1fr; grid-template-rows: 1fr auto; gap: 8px; }
+  .main-container { display: grid; grid-template-columns: 320px 1fr; grid-template-rows: 1fr; gap: 8px; }
   .hero { height: 100%; flex-direction: column; }
   .hero-side { width: 100%; height: auto; }
   .grid-metrics { grid-template-columns: repeat(4, 1fr); }
@@ -238,7 +238,7 @@ function tick(){
   document.getElementById('clock').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')+':'+String(n.getSeconds()).padStart(2,'0');
   const d=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
   const m=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-  document.getElementById('date').textContent=d[n.getDay()]+', '+n.getDate()+' '+m[n.getMonth()]+' '+n.getFullYear();
+  document.getElementById('date').textContent=d[n.getDay()]+', '+n.getDate()+' '+m[n.getMonth()]+' '+m[n.getMonth()]+' '+n.getFullYear();
 }
 setInterval(tick,1000);tick();
 
