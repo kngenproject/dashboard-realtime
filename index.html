@@ -2,8 +2,9 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0f172a">
+<meta name="color-scheme" content="dark">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -13,134 +14,128 @@
 <title>Dashboard Realtime</title>
 <style>
 :root{
-  --bg-main:#0f172a;
-  --surface:#1e293b;
-  --surface-hover:#334155;
-  --border:#334155;
-  --text-primary:#f8fafc;
-  --text-secondary:#94a3b8;
-  --text-muted:#7c8ba1;
-  --accent:#0ea5e9;
-  --accent-light:#38bdf8;
-  --success:#10b981;
-  --danger:#ef4444;
-  --warning:#f59e0b;
+  --bg-main:#0f172a;--surface:#1e293b;--surface-hover:#334155;--border:#334155;
+  --text-primary:#f8fafc;--text-secondary:#94a3b8;--text-muted:#8696ad;
+  --accent:#0ea5e9;--accent-light:#38bdf8;--success:#10b981;--danger:#ef4444;--warning:#f59e0b;
 }
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;width:100%;overflow:hidden;background:var(--bg-main);color:var(--text-primary)}
 body{display:flex;flex-direction:column;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+button{border:none;background:none;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent-light);outline-offset:2px}
 
-/* === HEADER === */
+/* HEADER */
 .header{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--bg-main);z-index:10;border-bottom:1px solid var(--border);flex-shrink:0;gap:8px}
 .brand{display:flex;align-items:center;gap:8px;min-width:0;flex:1}
-.brand-logo{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,var(--accent),#2563eb);display:flex;align-items:center;justify-content:center;font-size:13px;box-shadow:0 4px 10px rgba(14,165,233,0.3);flex-shrink:0}
+.brand-logo{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--accent),#2563eb);display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 4px 10px rgba(14,165,233,.3);flex-shrink:0}
 .brand-text{display:flex;flex-direction:column;min-width:0}
-.brand-name{font-size:12px;font-weight:800;letter-spacing:0.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.brand-ver{font-size:9px;color:var(--text-secondary);font-weight:600}
+.brand-name{font-size:12px;font-weight:800;letter-spacing:.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand-ver{font-size:10px;color:var(--text-secondary);font-weight:600}
 .header-actions{display:flex;align-items:center;gap:6px;flex-shrink:0}
-.badge{display:flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
-.badge-live{background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.3)}
-.badge-sync{background:rgba(14,165,233,0.15);color:var(--accent-light);border:1px solid rgba(14,165,233,0.3);cursor:pointer;transition:background .2s}
-.badge-sync:active{background:rgba(14,165,233,0.3)}
-.dot{width:6px;height:6px;border-radius:50%;background:var(--danger);box-shadow:0 0 6px var(--danger);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.badge{display:flex;align-items:center;justify-content:center;gap:5px;min-height:30px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+.badge-live{background:rgba(239,68,68,.15);color:#fca5a5;border:1px solid rgba(239,68,68,.3)}
+.badge-sync{background:rgba(14,165,233,.15);color:var(--accent-light);border:1px solid rgba(14,165,233,.3);transition:background .2s}
+.badge-sync:active{background:rgba(14,165,233,.3)}
+.badge-fs{background:rgba(148,163,184,.12);color:var(--text-secondary);border:1px solid var(--border);min-width:30px;font-size:14px}
+.badge-fs:active{background:rgba(148,163,184,.25)}
+.spin{display:inline-block}
+.loading .spin{animation:rot 1s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--danger);box-shadow:0 0 6px currentColor;animation:pulse 2s infinite;transition:background .3s}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
-/* === MAIN === */
-.main-content{flex:1;overflow-y:auto;overflow-x:hidden;padding:12px;display:grid;grid-template-columns:1fr;gap:12px;scroll-behavior:smooth;align-content:start;-webkit-overflow-scrolling:touch}
+/* MAIN */
+.main-content{flex:1;overflow-y:auto;overflow-x:hidden;padding:12px;display:grid;grid-template-columns:1fr;gap:12px;align-content:start;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 .col-left,.col-right{display:flex;flex-direction:column;gap:12px;min-width:0}
+.stale .card-live{opacity:.55;transition:opacity .3s}
 
-/* === CARD === */
-.card{background:var(--surface);border-radius:14px;border:1px solid var(--border);padding:14px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -2px rgba(0,0,0,0.1);min-width:0}
-.card-header{display:flex;align-items:center;gap:6px;margin-bottom:10px;font-size:11px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px}
+/* CARD */
+.card{background:var(--surface);border-radius:14px;border:1px solid var(--border);padding:14px;box-shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1);min-width:0}
+.card-header{display:flex;align-items:center;gap:6px;margin-bottom:10px;font-size:11px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.5px}
 .card-header::before{content:'';width:4px;height:12px;background:var(--accent);border-radius:4px}
 
-/* === ERROR BANNER === */
-.error-banner{display:none;align-items:center;justify-content:space-between;gap:12px;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.4);color:#fca5a5;padding:10px 14px;border-radius:12px;font-size:12px;font-weight:600}
+/* ERROR */
+.error-banner{display:none;align-items:center;justify-content:space-between;gap:12px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);color:#fca5a5;padding:10px 14px;border-radius:12px;font-size:12px;font-weight:600}
 .error-banner.show{display:flex}
-.error-banner button{background:var(--danger);color:#fff;border:none;padding:6px 12px;border-radius:8px;font-weight:700;font-size:11px;cursor:pointer;flex-shrink:0}
-.error-banner button:active{transform:scale(0.96)}
+.error-banner button{background:var(--danger);color:#fff;padding:8px 14px;border-radius:8px;font-weight:700;font-size:11px;flex-shrink:0}
+.error-banner button:active{transform:scale(.96)}
 
-/* === HERO === */
+/* HERO */
 .hero-grid{display:grid;grid-template-columns:1fr;gap:10px}
 .hero-time{display:flex;flex-direction:column;justify-content:center}
 .time-clock{font-size:clamp(36px,10vw,52px);font-weight:900;line-height:1;letter-spacing:-1px;font-variant-numeric:tabular-nums;background:linear-gradient(to right,#fff,var(--text-secondary));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.time-date{font-size:12px;color:var(--text-secondary);margin-top:4px;font-weight:500}
-.hero-weather{display:flex;align-items:center;justify-content:space-between;background:rgba(15,23,42,0.5);padding:10px 12px;border-radius:10px;gap:8px}
+.time-date{font-size:13px;color:var(--text-secondary);margin-top:4px;font-weight:500}
+.hero-weather{display:flex;align-items:center;justify-content:space-between;background:rgba(15,23,42,.5);padding:10px 12px;border-radius:10px;gap:8px}
 .weather-info{min-width:0;flex:1}
-.weather-loc{font-size:10px;color:var(--text-muted);display:flex;align-items:center;gap:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.weather-loc{font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .weather-loc svg{flex-shrink:0}
+.weather-loc span{overflow:hidden;text-overflow:ellipsis}
 .weather-temp{display:flex;align-items:flex-start;margin:2px 0}
-.weather-temp .val{font-size:clamp(26px,7vw,38px);font-weight:800;line-height:1;transition:color .3s}
+.weather-temp .val{font-size:clamp(26px,7vw,38px);font-weight:800;line-height:1}
 .weather-temp .unit{font-size:13px;color:var(--text-secondary);margin-top:2px}
-.weather-desc{font-size:12px;font-weight:600;color:var(--text-primary)}
-.weather-icon{font-size:clamp(26px,7vw,38px);line-height:1;flex-shrink:0;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.4))}
+.weather-desc{font-size:12px;font-weight:600}
+.weather-icon{font-size:clamp(26px,7vw,38px);line-height:1;flex-shrink:0;filter:drop-shadow(0 4px 8px rgba(0,0,0,.4))}
 
-/* === METRICS === */
+/* METRICS */
 .metrics-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.metric-box{background:rgba(15,23,42,0.4);padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.02);min-width:0}
-.metric-label{font-size:10px;color:var(--text-secondary);font-weight:600;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.metric-val{font-size:16px;font-weight:800;display:flex;align-items:baseline;gap:2px}
+.metric-box{background:rgba(15,23,42,.4);padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.02);min-width:0}
+.metric-label{font-size:11px;color:var(--text-secondary);font-weight:600;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.metric-val{font-size:17px;font-weight:800;display:flex;align-items:baseline;gap:2px;font-variant-numeric:tabular-nums}
 .metric-val small{font-size:10px;color:var(--text-muted);font-weight:600}
 .aqi-box{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding:10px 12px;gap:12px}
-.aqi-cat{font-size:10px;font-weight:800;letter-spacing:0.4px;margin-top:2px;transition:color .3s}
+.aqi-cat{font-size:10px;font-weight:800;letter-spacing:.4px;margin-top:2px;transition:color .3s}
 .aqi-bar-container{flex:1;height:6px;background:#334155;border-radius:4px;position:relative;min-width:60px}
-.aqi-bar-fill{position:absolute;top:0;left:0;height:100%;border-radius:4px;background:linear-gradient(90deg,var(--success),#84cc16,var(--warning),var(--danger),#a855f7)}
-.aqi-marker{position:absolute;top:-4px;width:14px;height:14px;background:#fff;border-radius:50%;box-shadow:0 0 6px rgba(0,0,0,0.5);border:2px solid var(--surface);transform:translateX(-50%);transition:left .5s ease}
+.aqi-bar-fill{position:absolute;top:0;left:0;height:100%;width:100%;border-radius:4px;background:linear-gradient(90deg,var(--success),#84cc16,var(--warning),var(--danger),#a855f7)}
+.aqi-marker{position:absolute;top:-4px;width:14px;height:14px;background:#fff;border-radius:50%;box-shadow:0 0 6px rgba(0,0,0,.5);border:2px solid var(--surface);transform:translateX(-50%);transition:left .5s ease}
 
-/* === INFO ROWS === */
-.info-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+/* INFO ROWS */
+.info-row{position:relative;display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
 .info-row::-webkit-scrollbar{display:none}
-.info-item{flex:0 0 auto;background:rgba(15,23,42,0.4);padding:8px 12px;border-radius:10px;text-align:center;min-width:70px;border:1px solid transparent;transition:background .3s,border-color .3s}
-.info-item.active{background:rgba(14,165,233,0.15);border-color:rgba(14,165,233,0.3)}
-.info-label{font-size:9px;color:var(--text-muted);font-weight:700;text-transform:uppercase;margin-bottom:3px;letter-spacing:0.3px}
-.info-item.active .info-label{color:var(--accent-light)}
-.info-val{font-size:13px;font-weight:800;color:var(--text-primary);font-variant-numeric:tabular-nums}
-.info-item.active .info-val{color:var(--accent-light)}
-.info-sub{font-size:9px;color:var(--accent-light);font-weight:700;margin-top:2px;height:11px;letter-spacing:0.3px}
+.info-item{flex:0 0 auto;background:rgba(15,23,42,.4);padding:8px 12px;border-radius:10px;text-align:center;min-width:72px;border:1px solid transparent;transition:background .3s,border-color .3s;scroll-snap-align:center}
+.info-item.active{background:rgba(14,165,233,.15);border-color:rgba(14,165,233,.35)}
+.info-item.next:not(.active){border-color:rgba(148,163,184,.35);border-style:dashed}
+.info-label{font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;margin-bottom:3px;letter-spacing:.3px}
+.info-item.active .info-label,.info-item.active .info-val{color:var(--accent-light)}
+.info-val{font-size:14px;font-weight:800;font-variant-numeric:tabular-nums}
+.info-sub{font-size:10px;color:var(--text-secondary);font-weight:700;margin-top:2px;height:12px;letter-spacing:.3px;white-space:nowrap}
 
-/* === CHART === */
+/* CHART */
 .chart-container{width:100%;height:100px;position:relative}
 .chart-svg{width:100%;height:100%;display:block;overflow:visible}
-.chart-tooltip{font-size:10px;fill:var(--text-secondary);font-weight:600}
-.chart-hr{font-size:9px;fill:var(--text-muted);font-weight:600}
+.chart-tooltip{font-size:10px;fill:var(--text-secondary);font-weight:700}
+.chart-hr{font-size:10px;fill:var(--text-muted);font-weight:600}
 
-/* === TICKERS === */
+/* TICKERS */
 .footer-tickers{flex-shrink:0;background:var(--surface);border-top:1px solid var(--border);display:flex;flex-direction:column;z-index:10}
-.ticker-row{display:flex;align-items:center;height:30px;overflow:hidden;border-bottom:1px solid var(--border);position:relative}
+.ticker-row{display:flex;align-items:center;height:32px;overflow:hidden;border-bottom:1px solid var(--border);position:relative;cursor:pointer}
 .ticker-row:last-child{border-bottom:none}
-.ticker-label-static{position:absolute;left:0;top:0;height:100%;padding:0 10px;background:var(--surface);display:flex;align-items:center;font-size:10px;font-weight:800;color:var(--accent-light);z-index:2;box-shadow:4px 0 8px rgba(30,41,59,0.9)}
-.ticker-content{display:flex;gap:24px;white-space:nowrap;padding-left:88px;will-change:transform;animation:scrollLeft 40s linear infinite}
+.ticker-label-static{position:absolute;left:0;top:0;height:100%;width:88px;padding:0 10px;background:var(--surface);display:flex;align-items:center;font-size:10px;font-weight:800;color:var(--accent-light);z-index:2;box-shadow:4px 0 8px rgba(30,41,59,.9)}
+.ticker-content{display:flex;width:max-content;flex-shrink:0;white-space:nowrap;margin-left:88px;will-change:transform;animation:scrollLeft 40s linear infinite}
 .ticker-row:hover .ticker-content,.ticker-row.paused .ticker-content{animation-play-state:paused}
-@keyframes scrollLeft{0%{transform:translate3d(0,0,0)}100%{transform:translate3d(-100%,0,0)}}
-.t-item{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600}
-.t-val{font-weight:800}
-.tk-news-tag{background:var(--accent);color:#fff;font-size:9px;padding:2px 6px;border-radius:4px;font-weight:800;margin-right:6px}
+.ticker-row.paused .ticker-label-static::after{content:'⏸';margin-left:6px;font-size:9px;opacity:.8}
+@keyframes scrollLeft{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
+.t-item{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding-right:28px}
+.t-val{font-weight:800;font-variant-numeric:tabular-nums}
+.tk-news-tag{background:var(--accent);color:#fff;font-size:9px;padding:2px 6px;border-radius:4px;font-weight:800;margin-right:2px}
 
-/* =========================================
-   RESPONSIVE BREAKPOINTS
-   ========================================= */
-
-/* Ultra narrow: fold cover, small phones */
+/* RESPONSIVE */
 @media (max-width:360px){
   .main-content{padding:8px;gap:8px}
   .col-left,.col-right{gap:8px}
   .card{padding:10px;border-radius:12px}
   .time-clock{font-size:32px}
-  .weather-temp .val{font-size:24px}
-  .weather-icon{font-size:24px}
+  .weather-temp .val,.weather-icon{font-size:24px}
   .brand-name{font-size:11px}
-  .badge{font-size:9px;padding:2px 7px}
+  .badge{font-size:10px;padding:2px 8px}
   .metrics-grid{gap:6px}
   .metric-box{padding:8px}
-  .metric-val{font-size:14px}
-  .info-item{padding:6px 10px;min-width:60px}
-  .info-val{font-size:12px}
+  .metric-val{font-size:15px}
+  .info-item{padding:6px 10px;min-width:62px}
+  .info-val{font-size:13px}
   .chart-container{height:80px}
-  .ticker-row{height:26px}
-  .t-item{font-size:10px}
+  .ticker-row{height:28px}
+  .t-item{font-size:11px;padding-right:22px}
 }
-
-/* Landscape phone: 2 kolom padat */
 @media (orientation:landscape) and (max-height:520px) and (max-width:900px){
   .header{padding:6px 12px}
   .main-content{grid-template-columns:1fr 1fr;gap:8px;padding:8px}
@@ -149,57 +144,53 @@ body{display:flex;flex-direction:column;padding:env(safe-area-inset-top) env(saf
   .card-header{font-size:10px;margin-bottom:6px}
   .time-clock{font-size:clamp(26px,4.5vw,38px)}
   .time-date{font-size:11px}
-  .weather-temp .val{font-size:clamp(20px,3.5vw,30px)}
-  .weather-icon{font-size:clamp(20px,3.5vw,30px)}
+  .weather-temp .val,.weather-icon{font-size:clamp(20px,3.5vw,30px)}
   .chart-container{height:70px}
   .metrics-grid{grid-template-columns:repeat(3,1fr);gap:6px}
   .metric-box{padding:8px}
-  .metric-label{font-size:9px}
-  .metric-val{font-size:13px}
-  .info-item{padding:6px 10px;min-width:58px}
-  .info-val{font-size:12px}
-  .info-sub{font-size:8px}
-  .ticker-row{height:24px}
-  .t-item{font-size:10px}
-  .ticker-content{gap:20px;padding-left:80px}
+  .metric-label{font-size:10px}
+  .metric-val{font-size:14px}
+  .info-item{padding:6px 10px;min-width:60px}
+  .info-val{font-size:13px}
+  .ticker-row{height:26px}
+  .t-item{font-size:11px;padding-right:22px}
 }
-
-/* TABLET PORTRAIT / LARGE PHONE LANDSCAPE */
 @media (min-width:700px){
   .main-content{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:14px;padding:14px}
   .col-left,.col-right{gap:14px}
   .time-clock{font-size:clamp(48px,6vw,58px)}
-  .weather-temp .val{font-size:clamp(34px,3.5vw,42px)}
-  .weather-icon{font-size:clamp(34px,3.5vw,42px)}
+  .weather-temp .val,.weather-icon{font-size:clamp(34px,3.5vw,42px)}
   .card{padding:16px;border-radius:16px}
   .card-header{font-size:12px;margin-bottom:12px}
   .metrics-grid{grid-template-columns:repeat(3,1fr);gap:10px}
-  .metric-val{font-size:18px}
-  .info-item{flex:1 1 0;min-width:60px;padding:9px 12px}
-  .info-val{font-size:14px}
-  .info-sub{font-size:10px}
+  .metric-val{font-size:19px}
+  .info-item{flex:1 1 0;min-width:64px;padding:9px 12px}
+  .info-val{font-size:15px}
   .chart-container{height:130px}
   .card-chart{display:flex;flex-direction:column;flex:1 0 auto}
   .card-chart .chart-container{flex:1 1 auto;min-height:100px}
-  .t-item{font-size:12px}
-  .ticker-content{gap:32px;padding-left:100px}
-  .ticker-row{height:32px}
+  .t-item{font-size:13px;padding-right:36px}
+  .ticker-row{height:34px}
 }
-
-/* DESKTOP / TABLET LANDSCAPE */
 @media (min-width:1000px){
   .main-content{grid-template-columns:340px minmax(0,1fr);gap:16px;padding:16px}
   .col-left,.col-right{gap:16px}
   .time-clock{font-size:64px}
-  .weather-temp .val{font-size:48px}
-  .weather-icon{font-size:48px}
+  .weather-temp .val,.weather-icon{font-size:48px}
   .chart-container{height:150px}
 }
-
-/* VERY WIDE */
 @media (min-width:1400px){
   .main-content{grid-template-columns:380px minmax(0,1fr);gap:20px;padding:20px}
   .chart-container{height:180px}
+}
+@media (min-width:1800px){body{zoom:1.25}}
+
+@media (prefers-reduced-motion:reduce){
+  .dot,.loading .spin{animation:none}
+  .ticker-row{overflow-x:auto;scrollbar-width:none}
+  .ticker-content{animation:none!important}
+  .aqi-marker,.info-item{transition:none}
+  .main-content{scroll-behavior:auto}
 }
 </style>
 </head>
@@ -207,22 +198,23 @@ body{display:flex;flex-direction:column;padding:env(safe-area-inset-top) env(saf
 
 <header class="header">
   <div class="brand">
-    <div class="brand-logo">📡</div>
+    <div class="brand-logo" aria-hidden="true">📡</div>
     <div class="brand-text">
       <span class="brand-name">REALTIME DASHBOARD</span>
-      <span class="brand-ver" id="ver">v6.3.1</span>
+      <span class="brand-ver" id="ver">v6.4.0</span>
     </div>
   </div>
   <div class="header-actions">
-    <div class="badge badge-sync" id="countdown" onclick="forceRefresh()" title="Tap untuk refresh">⟳ --:--</div>
-    <div class="badge badge-live"><span class="dot"></span>LIVE</div>
+    <button class="badge badge-fs" id="fsBtn" aria-label="Layar penuh" title="Layar penuh" hidden>⛶</button>
+    <button class="badge badge-sync" id="countdown" aria-label="Refresh data" title="Tap untuk refresh"><span class="spin">⟳</span><span id="cdText">--:--</span></button>
+    <div class="badge badge-live" title="Layar tetap menyala: tidak aktif"><span class="dot" id="liveDot"></span>LIVE</div>
   </div>
 </header>
 
-<main class="main-content">
-  <div class="error-banner" id="errorBanner">
-    <span id="errText">⚠️ Gagal memuat data. Cek koneksi.</span>
-    <button onclick="forceRefresh()">Coba Lagi</button>
+<main class="main-content" id="main">
+  <div class="error-banner" id="errorBanner" role="alert">
+    <span id="errText">⚠️ Gagal memuat data.</span>
+    <button id="retryBtn">Coba Lagi</button>
   </div>
 
   <div class="col-left">
@@ -232,13 +224,13 @@ body{display:flex;flex-direction:column;padding:env(safe-area-inset-top) env(saf
           <div class="time-clock" id="clock">--:--:--</div>
           <div class="time-date" id="date">Memuat tanggal...</div>
         </div>
-        <div class="hero-weather">
+        <div class="hero-weather card-live">
           <div class="weather-info">
-            <div class="weather-loc"><svg width="12" height="12" viewBox="0 0 24 24" fill="var(--accent)"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span id="loc">Mencari lokasi...</span></div>
+            <div class="weather-loc"><svg width="12" height="12" viewBox="0 0 24 24" fill="var(--accent)" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span id="loc">Mencari lokasi...</span></div>
             <div class="weather-temp"><span class="val" id="temp">--</span><span class="unit">°C</span></div>
             <div class="weather-desc" id="desc">Memuat cuaca...</div>
           </div>
-          <div class="weather-icon" id="wicon">⏳</div>
+          <div class="weather-icon" id="wicon" aria-hidden="true">⏳</div>
         </div>
       </div>
     </div>
@@ -256,7 +248,7 @@ body{display:flex;flex-direction:column;padding:env(safe-area-inset-top) env(saf
   <div class="col-right">
     <div class="card">
       <div class="card-header">Jadwal Waktu Sholat</div>
-      <div class="info-row">
+      <div class="info-row" id="prayerRow">
         <div class="info-item" id="cImsak"><div class="info-label">Imsak</div><div class="info-val" id="pImsak">--:--</div><div class="info-sub"></div></div>
         <div class="info-item" id="cSubuh"><div class="info-label">Subuh</div><div class="info-val" id="pSubuh">--:--</div><div class="info-sub"></div></div>
         <div class="info-item" id="cDzuhur"><div class="info-label">Dzuhur</div><div class="info-val" id="pDzuhur">--:--</div><div class="info-sub"></div></div>
@@ -266,7 +258,7 @@ body{display:flex;flex-direction:column;padding:env(safe-area-inset-top) env(saf
       </div>
     </div>
 
-    <div class="card">
+    <div class="card card-live">
       <div class="card-header">Metrik Kondisi Udara</div>
       <div class="metrics-grid">
         <div class="metric-box"><div class="metric-label">💧 Kelembapan</div><div class="metric-val" id="hum">--<small>%</small></div></div>
@@ -280,166 +272,167 @@ body{display:flex;flex-direction:column;padding:env(safe-area-inset-top) env(saf
             <div class="aqi-cat" id="aqiCat">—</div>
           </div>
           <div class="aqi-bar-container">
-            <div class="aqi-bar-fill" style="width:100%"></div>
+            <div class="aqi-bar-fill"></div>
             <div class="aqi-marker" id="aqiMarker" style="left:0%"></div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="card card-chart">
+    <div class="card card-chart card-live">
       <div class="card-header">Grafik Suhu (12 Jam)</div>
-      <div class="chart-container"><svg class="chart-svg" id="tempChart" preserveAspectRatio="none"></svg></div>
+      <div class="chart-container"><svg class="chart-svg" id="tempChart" preserveAspectRatio="none" role="img" aria-label="Grafik suhu 12 jam ke depan"></svg></div>
     </div>
   </div>
 </main>
 
 <footer class="footer-tickers">
-  <div class="ticker-row" id="rowEco">
+  <div class="ticker-row" id="rowEco" title="Tap untuk jeda">
     <div class="ticker-label-static">EKONOMI</div>
-    <div class="ticker-content" id="tickerEco" style="animation-duration:50s">Memuat data pasar...</div>
+    <div class="ticker-content" id="tickerEco">Memuat data pasar...</div>
   </div>
-  <div class="ticker-row" id="rowNews">
+  <div class="ticker-row" id="rowNews" title="Tap untuk jeda">
     <div class="ticker-label-static">BERITA</div>
-    <div class="ticker-content" id="tickerNews" style="animation-duration:70s">Memuat berita terkini...</div>
+    <div class="ticker-content" id="tickerNews">Memuat berita terkini...</div>
   </div>
 </footer>
 
 <script>
-const VERSION='6.3.1';
+const VERSION='6.4.0';
 const REFRESH_SEC=300;
-const FALLBACK={lat:-6.2088,lon:106.8456};
-document.getElementById('ver').textContent='v'+VERSION;
+const FALLBACK={lat:-6.2088,lon:106.8456,fallback:true};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad=n=>String(n).padStart(2,'0');
+const store={
+  get(k){try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+};
+const dayKey=(d=new Date())=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
 
-// SERVICE WORKER
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').catch(e => console.warn('SW gagal:', e));
-  });
+// ---- state (dideklarasikan di atas agar aman dari TDZ)
+let coords=null, placeName=null, lastSync=0, loading=false, busy=false;
+let lastDayKey='', lastActive=null, prayerBusy=false;
+const savedPrayer=store.get('dash_prayer')||{};
+let PRAYER_TIMES=savedPrayer.times||{Imsak:'04:09',Subuh:'04:19',Dzuhur:'11:44',Ashar:'14:45',Maghrib:'17:49',Isya:'18:58'};
+let prayerDay=savedPrayer.day||'';
+const prayerIds=['Imsak','Subuh','Dzuhur','Ashar','Maghrib','Isya'];
+const tickerUnits={eco:'',news:''};
+
+$('ver').textContent='v'+VERSION;
+
+// ---- service worker
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(e=>console.warn('SW gagal:',e)));
 }
 
-// ============ SYNC COUNTDOWN ============
-let lastSync = 0;
+// ============ COUNTDOWN ============
 function updateCountdown(){
-  const el = document.getElementById('countdown');
-  if(!lastSync){ el.textContent = '⟳ --:--'; return; }
-  const elapsed = Math.floor((Date.now() - lastSync)/1000);
-  const remain = Math.max(0, REFRESH_SEC - elapsed);
-  if(remain <= 0){ el.textContent = '⟳ sekarang'; return; }
-  const mm = Math.floor(remain/60);
-  const ss = String(remain%60).padStart(2,'0');
-  el.textContent = '⟳ ' + mm + ':' + ss;
+  const t=$('cdText');
+  $('countdown').classList.toggle('loading',loading);
+  if(loading){t.textContent='memuat';return;}
+  if(!lastSync){t.textContent='--:--';return;}
+  const remain=Math.max(0,REFRESH_SEC-Math.floor((Date.now()-lastSync)/1000));
+  t.textContent=remain<=0?'sekarang':Math.floor(remain/60)+':'+pad(remain%60);
 }
-setInterval(updateCountdown, 1000);
-updateCountdown();
+setInterval(updateCountdown,1000);updateCountdown();
 
-// ============ ERROR BANNER ============
-function showError(msg){
-  document.getElementById('errText').textContent = '⚠️ ' + msg;
-  document.getElementById('errorBanner').classList.add('show');
-}
-function hideError(){
-  document.getElementById('errorBanner').classList.remove('show');
-}
+// ============ ERROR ============
+function showError(msg){$('errText').textContent='⚠️ '+msg;$('errorBanner').classList.add('show');}
+function hideError(){$('errorBanner').classList.remove('show');}
 
 // ============ CLOCK & CALENDAR ============
+const HARI=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+const BULAN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+
 function tick(){
   const n=new Date();
-  document.getElementById('clock').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')+':'+String(n.getSeconds()).padStart(2,'0');
-  const d=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-  const m=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-  document.getElementById('date').textContent=d[n.getDay()]+', '+n.getDate()+' '+m[n.getMonth()]+' '+n.getFullYear();
-  document.getElementById('calMas').textContent=n.getDate()+' '+m[n.getMonth()].substring(0,3);
+  $('clock').textContent=pad(n.getHours())+':'+pad(n.getMinutes())+':'+pad(n.getSeconds());
+  const k=dayKey(n);
+  if(k!==lastDayKey){
+    lastDayKey=k;
+    $('date').textContent=HARI[n.getDay()]+', '+n.getDate()+' '+BULAN[n.getMonth()]+' '+n.getFullYear();
+    $('calMas').textContent=n.getDate()+' '+BULAN[n.getMonth()].substring(0,3);
+    renderCalendar();
+    updatePrayerActive();
+  }
+}
+function renderCalendar(){
+  const now=new Date();
+  const pasaran=['Legi','Pahing','Pon','Wage','Kliwon'];
+  const neptuHari=[5,4,3,7,8,6,9];
+  const neptuPas=[5,9,7,4,8];
+  const utcDay=Math.floor(Date.UTC(now.getFullYear(),now.getMonth(),now.getDate())/86400000);
+  const baseDay=Math.floor(Date.UTC(2000,0,1)/86400000);
+  const pasIdx=(((1+utcDay-baseDay)%5)+5)%5;
+  let hijri;
+  try{hijri=new Intl.DateTimeFormat('id-ID-u-ca-islamic-umalqura',{day:'numeric',month:'short',year:'numeric'}).format(now);}
+  catch(e){hijri='--';}
+  $('calHijri').textContent=hijri;
+  $('calWeton').textContent=HARI[now.getDay()]+' '+pasaran[pasIdx]+' · '+(neptuHari[now.getDay()]+neptuPas[pasIdx]);
 }
 setInterval(tick,1000);tick();
 
-function renderCalendar(){
-  const now=new Date();
-  const dayIdx=now.getDay();
-  const pasaran=['Legi','Pahing','Pon','Wage','Kliwon'];
-  const wetonNames=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-  const neptuHari=[5,4,3,7,8,6,9]; // Minggu..Sabtu
-  const neptuPas=[5,9,7,4,8]; // Legi,Pahing,Pon,Wage,Kliwon
-  const base=new Date(2000,0,1);
-  const basePas=1;
-  const diff=Math.floor((now-base)/86400000);
-  const pasIdx=((basePas+diff)%5+5)%5;
-
-  let hijri='--';
-  try{
-    hijri=new Intl.DateTimeFormat('id-ID-u-ca-islamic-umalqura',{day:'numeric',month:'short',year:'numeric'}).format(now);
-  }catch(e){ hijri=now.getDate()+' Hijriah'; }
-  const neptu = neptuHari[dayIdx] + neptuPas[pasIdx];
-  document.getElementById('calHijri').textContent=hijri;
-  document.getElementById('calWeton').textContent=wetonNames[dayIdx]+' '+pasaran[pasIdx]+' · '+neptu;
-}
-renderCalendar();
-
-// ============ PRAYER TIMES ============
-let PRAYER_TIMES={Imsak:'04:09',Subuh:'04:19',Dzuhur:'11:44',Ashar:'14:45',Maghrib:'17:49',Isya:'18:58'};
-const prayerIds=['Imsak','Subuh','Dzuhur','Ashar','Maghrib','Isya'];
-
-function setPrayerDisplay(){
-  prayerIds.forEach(id=>{document.getElementById('p'+id).textContent=PRAYER_TIMES[id];});
-}
-setPrayerDisplay();
-
-function toMin(t){const[h,m]=String(t).split(':').map(Number);return h*60+m;}
+// ============ PRAYER ============
+function setPrayerDisplay(){prayerIds.forEach(id=>{$('p'+id).textContent=PRAYER_TIMES[id];});}
+const toMin=t=>{const[h,m]=String(t).split(':').map(Number);return h*60+m;};
 
 function updatePrayerActive(){
   const now=new Date();
-  const curMin = now.getHours()*60 + now.getMinutes();
-  let active=null, next=null, nextDiff=0;
-
-  for(const k of prayerIds){
-    if(curMin >= toMin(PRAYER_TIMES[k])) active=k;
+  const cur=now.getHours()*60+now.getMinutes();
+  let active='Isya',next=null,nextDiff=0;
+  if(cur>=toMin(PRAYER_TIMES.Imsak)){
+    for(const k of prayerIds) if(cur>=toMin(PRAYER_TIMES[k])) active=k;
   }
   for(const k of prayerIds){
-    const d = toMin(PRAYER_TIMES[k]) - curMin;
-    if(d > 0){ next=k; nextDiff=d; break; }
+    const d=toMin(PRAYER_TIMES[k])-cur;
+    if(d>0){next=k;nextDiff=d;break;}
   }
-  // kalau semua sudah lewat, next = Imsak besok
-  if(!next){ next='Imsak'; nextDiff = (24*60 - curMin) + toMin(PRAYER_TIMES['Imsak']); }
-
+  if(!next){next='Imsak';nextDiff=(1440-cur)+toMin(PRAYER_TIMES.Imsak);}
   prayerIds.forEach(id=>{
-    const el=document.getElementById('c'+id);
-    if(!el) return;
-    el.classList.toggle('active', id===active);
-    const sub = el.querySelector('.info-sub');
-    if(!sub) return;
+    const el=$('c'+id);
+    el.classList.toggle('active',id===active);
+    el.classList.toggle('next',id===next);
+    const sub=el.querySelector('.info-sub');
     if(id===next){
-      const hh=Math.floor(nextDiff/60), mm=nextDiff%60;
-      sub.textContent = hh>0 ? `${hh}j ${mm}m lagi` : `${mm}m lagi`;
-    } else {
-      sub.textContent = '';
-    }
+      const hh=Math.floor(nextDiff/60),mm=nextDiff%60;
+      sub.textContent=hh>0?`${hh}j ${mm}m lagi`:`${mm}m lagi`;
+    }else sub.textContent=id===active?'sekarang':'';
   });
+  if(active!==lastActive){
+    lastActive=active;
+    const row=$('prayerRow'),el=$('c'+active);
+    row.scrollTo({left:el.offsetLeft-row.clientWidth/2+el.clientWidth/2,behavior:'smooth'});
+  }
 }
-setInterval(updatePrayerActive,30000);updatePrayerActive();
-
 async function fetchPrayer(lat,lon){
+  if(prayerBusy)return;
+  prayerBusy=true;
   try{
-    const url=`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=20`;
-    const r=await fetchT(url,7000);
+    const d=new Date();
+    const ds=pad(d.getDate())+'-'+pad(d.getMonth()+1)+'-'+d.getFullYear();
+    const r=await fetchT(`https://api.aladhan.com/v1/timings/${ds}?latitude=${lat}&longitude=${lon}&method=20`,8000);
     const j=await r.json();
-    const t=j && j.data && j.data.timings;
-    if(!t) return;
+    const t=j&&j.data&&j.data.timings;
+    if(!t)return;
     const clean=s=>String(s).replace(/\s*\(.*\)/,'').trim();
-    PRAYER_TIMES={
-      Imsak: clean(t.Imsak),
-      Subuh: clean(t.Fajr),
-      Dzuhur: clean(t.Dhuhr),
-      Ashar: clean(t.Asr),
-      Maghrib: clean(t.Maghrib),
-      Isya: clean(t.Isha)
-    };
-    setPrayerDisplay();
-    updatePrayerActive();
-  }catch(e){ console.warn('Prayer API gagal:',e); }
+    PRAYER_TIMES={Imsak:clean(t.Imsak),Subuh:clean(t.Fajr),Dzuhur:clean(t.Dhuhr),Ashar:clean(t.Asr),Maghrib:clean(t.Maghrib),Isya:clean(t.Isha)};
+    prayerDay=dayKey();
+    store.set('dash_prayer',{day:prayerDay,times:PRAYER_TIMES});
+    setPrayerDisplay();updatePrayerActive();
+  }catch(e){console.warn('Prayer API gagal:',e);}
+  finally{prayerBusy=false;}
 }
+setPrayerDisplay();
+setInterval(updatePrayerActive,15000);updatePrayerActive();
 
 // ============ WEATHER & AQI ============
-const WMO={0:['Cerah','☀️'],1:['Seb.Cerah','🌤️'],2:['Berawan','⛅'],3:['Mendung','☁️'],45:['Kabut','🌫️'],48:['Kabut Beku','🌫️'],51:['Gerimis Ringan','🌦️'],53:['Gerimis','🌦️'],55:['Gerimis Lbt','🌦️'],61:['Hujan Ringan','🌧️'],63:['Hujan Sdg','🌧️'],65:['Hujan Lbt','🌧️'],71:['Salju','🌨️'],80:['Hujan Lokal','🌦️'],95:['Badai Petir','⛈️']};
+const WMO={0:['Cerah','☀️'],1:['Cerah Berawan','🌤️'],2:['Berawan','⛅'],3:['Mendung','☁️'],45:['Kabut','🌫️'],48:['Kabut Beku','🌫️'],
+51:['Gerimis Ringan','🌦️'],53:['Gerimis','🌦️'],55:['Gerimis Lebat','🌦️'],56:['Gerimis Beku','🌧️'],57:['Gerimis Beku','🌧️'],
+61:['Hujan Ringan','🌧️'],63:['Hujan Sedang','🌧️'],65:['Hujan Lebat','🌧️'],66:['Hujan Beku','🌧️'],67:['Hujan Beku','🌧️'],
+71:['Salju Ringan','🌨️'],73:['Salju','🌨️'],75:['Salju Lebat','🌨️'],77:['Butir Salju','🌨️'],
+80:['Hujan Lokal','🌦️'],81:['Hujan Lokal Deras','🌧️'],82:['Hujan Sangat Deras','⛈️'],85:['Salju Lokal','🌨️'],86:['Salju Lebat','🌨️'],
+95:['Badai Petir','⛈️'],96:['Petir + Es','⛈️'],99:['Petir + Es Lebat','⛈️']};
 const wi=c=>WMO[c]||['Normal','⛅'];
 
 function fetchT(url,ms){
@@ -457,111 +450,116 @@ function getLoc(){
     );
   });
 }
-
 async function fetchPlaceName(lat,lon){
+  const saved=store.get('dash_place');
+  if(saved&&Math.abs(saved.lat-lat)<0.05&&Math.abs(saved.lon-lon)<0.05&&saved.name)return saved.name;
   try{
     const r=await fetchT(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&zoom=10&accept-language=id`,6000);
-    const j=await r.json();
-    const a=j.address||{};
-    return a.city || a.town || a.village || a.municipality || a.county || a.state || (lat.toFixed(2)+', '+lon.toFixed(2));
-  }catch(e){ return lat.toFixed(2)+', '+lon.toFixed(2); }
+    const a=(await r.json()).address||{};
+    const name=a.city||a.town||a.village||a.municipality||a.county||a.state;
+    if(name){store.set('dash_place',{lat,lon,name});return name;}
+  }catch(e){}
+  return lat.toFixed(2)+', '+lon.toFixed(2);
 }
-
 async function fetchWeather(lat,lon){
-  const p=new URLSearchParams({
-    latitude:lat,longitude:lon,
-    current:'temperature_2m,relative_humidity_2m,weather_code,pressure_msl,wind_speed_10m',
-    hourly:'temperature_2m,uv_index',
-    timezone:'auto',forecast_days:2
-  });
-  const r=await fetchT('https://api.open-meteo.com/v1/forecast?'+p,7000);
+  const p=new URLSearchParams({latitude:lat,longitude:lon,current:'temperature_2m,relative_humidity_2m,weather_code,pressure_msl,wind_speed_10m',hourly:'temperature_2m,uv_index',timezone:'auto',forecast_days:2});
+  const r=await fetchT('https://api.open-meteo.com/v1/forecast?'+p,8000);
+  if(!r.ok)throw new Error('weather '+r.status);
   return r.json();
 }
 async function fetchAQI(lat,lon){
   const p=new URLSearchParams({latitude:lat,longitude:lon,current:'european_aqi',timezone:'auto'});
-  const r=await fetchT('https://air-quality-api.open-meteo.com/v1/air-quality?'+p,7000);
+  const r=await fetchT('https://air-quality-api.open-meteo.com/v1/air-quality?'+p,8000);
+  if(!r.ok)throw new Error('aqi '+r.status);
   return r.json();
 }
-
 function aqiCategory(v){
-  if(v<=20) return ['BAIK','#10b981'];
-  if(v<=40) return ['CUKUP BAIK','#84cc16'];
-  if(v<=60) return ['SEDANG','#f59e0b'];
-  if(v<=80) return ['BURUK','#ef4444'];
-  if(v<=100) return ['SANGAT BURUK','#a855f7'];
-  return ['EKSTREM','#dc2626'];
+  if(v<=20)return['BAIK','#10b981'];
+  if(v<=40)return['CUKUP BAIK','#84cc16'];
+  if(v<=60)return['SEDANG','#f59e0b'];
+  if(v<=80)return['BURUK','#ef4444'];
+  if(v<=100)return['SANGAT BURUK','#a855f7'];
+  return['EKSTREM','#dc2626'];
 }
 
-let coords=null;
-let placeNameCached=null;
+function renderWeather(w,aq){
+  const c=w.current,info=wi(c.weather_code);
+  $('temp').textContent=Math.round(c.temperature_2m);
+  $('desc').textContent=info[0];
+  $('wicon').textContent=info[1];
+  $('hum').innerHTML=esc(c.relative_humidity_2m)+'<small>%</small>';
+  $('wind').innerHTML=Number(c.wind_speed_10m).toFixed(1)+'<small>km/j</small>';
+  $('press').innerHTML=Math.round(c.pressure_msl)+'<small>hPa</small>';
+
+  let uvIdx=0;
+  if(w.hourly&&w.hourly.time){
+    const nowMs=Date.now();
+    for(let i=0;i<w.hourly.time.length;i++){
+      if(new Date(w.hourly.time[i]).getTime()<=nowMs)uvIdx=i;else break;
+    }
+  }
+  const uv=w.hourly&&w.hourly.uv_index?w.hourly.uv_index[uvIdx]:null;
+  $('uv').textContent=uv==null?'--':Number(uv).toFixed(1);
+
+  const aqiVal=aq&&aq.current?aq.current.european_aqi:null;
+  const catEl=$('aqiCat');
+  if(aqiVal==null){
+    $('aqi').textContent='--';catEl.textContent='—';catEl.style.color='';
+    $('aqiMarker').style.left='0%';
+  }else{
+    $('aqi').textContent=aqiVal;
+    const[cat,col]=aqiCategory(aqiVal);
+    catEl.textContent=cat;catEl.style.color=col;
+    $('aqiMarker').style.left=Math.min(96,Math.max(2,aqiVal))+'%';
+  }
+  if(w.hourly)renderChart(w.hourly);
+}
+
+function setLoc(){
+  if(!placeName)return;
+  $('loc').textContent=placeName+(coords&&coords.fallback?' (default)':'');
+}
 
 async function refreshDashboard(){
-  if(!coords) coords=await getLoc();
+  if(busy)return;
+  busy=true;loading=true;updateCountdown();
   try{
-    if(!placeNameCached){
-      placeNameCached = await fetchPlaceName(coords.lat, coords.lon);
-      document.getElementById('loc').textContent = placeNameCached;
-      fetchPrayer(coords.lat, coords.lon);
-    }
+    if(!coords)coords=await getLoc();
+    if(!placeName)placeName=await fetchPlaceName(coords.lat,coords.lon);
+    setLoc();
+    if(prayerDay!==dayKey())fetchPrayer(coords.lat,coords.lon);
 
     const[w,aq]=await Promise.all([
       fetchWeather(coords.lat,coords.lon),
-      fetchAQI(coords.lat,coords.lon)
+      fetchAQI(coords.lat,coords.lon).catch(()=>null)
     ]);
-
-    const c=w.current,wInfo=wi(c.weather_code);
-    document.getElementById('temp').textContent=Math.round(c.temperature_2m);
-    document.getElementById('desc').textContent=wInfo[0];
-    document.getElementById('wicon').textContent=wInfo[1];
-    document.getElementById('hum').innerHTML=c.relative_humidity_2m+'<small>%</small>';
-    document.getElementById('wind').innerHTML=Number(c.wind_speed_10m).toFixed(1)+'<small>km/j</small>';
-    document.getElementById('press').innerHTML=Math.round(c.pressure_msl)+'<small>hPa</small>';
-
-    const nowMs=Date.now();
-    let uvIdx=0;
-    if(w.hourly && w.hourly.time){
-      for(let i=0;i<w.hourly.time.length;i++){
-        if(new Date(w.hourly.time[i]).getTime()<=nowMs) uvIdx=i;
-        else break;
-      }
-    }
-    const uvVal=(w.hourly && w.hourly.uv_index)?w.hourly.uv_index[uvIdx]:0;
-    document.getElementById('uv').textContent=Number(uvVal||0).toFixed(1);
-
-    // AQI + kategori
-    const aqiVal=(aq && aq.current && aq.current.european_aqi)||0;
-    document.getElementById('aqi').textContent=aqiVal;
-    const [cat,catColor]=aqiCategory(aqiVal);
-    const catEl=document.getElementById('aqiCat');
-    catEl.textContent=cat;
-    catEl.style.color=catColor;
-    document.getElementById('aqiMarker').style.left=Math.min(96,Math.max(0,(aqiVal/100)*100))+'%';
-
-    if(w.hourly) renderChart(w.hourly);
-
-    lastSync = Date.now();
-    updateCountdown();
+    if(!w||!w.current)throw new Error('data kosong');
+    renderWeather(w,aq);
+    store.set('dash_last',{w,aq,place:placeName,fallback:!!coords.fallback});
+    lastSync=Date.now();
+    $('main').classList.remove('stale');
     hideError();
   }catch(e){
     console.warn('Refresh gagal:',e);
-    showError('Gagal memuat data. Cek koneksi.');
+    $('main').classList.add('stale');
+    showError(navigator.onLine?'Gagal memuat data. Menampilkan data terakhir.':'Offline. Menampilkan data terakhir.');
+  }finally{
+    loading=false;busy=false;updateCountdown();
   }
 }
-
 function forceRefresh(){
-  lastSync = 0;
-  placeNameCached = null;
-  updateCountdown();
+  lastSync=0;coords=null;placeName=null;
   refreshDashboard();
+  updateTickers();
 }
 
+// ============ CHART ============
 function renderChart(hourly){
-  const svg=document.getElementById('tempChart');
+  window._lastHourly=hourly;
+  const svg=$('tempChart');
   const rect=svg.getBoundingClientRect();
-  const w=rect.width||300, h=rect.height||100;
-  const padTop=16, padBot=14;
-  const chartH = h - padTop - padBot;
-
+  const w=rect.width||300,h=rect.height||100;
+  const padTop=16,padBot=14,chartH=h-padTop-padBot;
   const now=Date.now();
   let startIdx=0;
   for(let i=0;i<hourly.time.length;i++){
@@ -570,159 +568,165 @@ function renderChart(hourly){
   const pts=hourly.temperature_2m.slice(startIdx,startIdx+12);
   const times=hourly.time.slice(startIdx,startIdx+12);
   if(pts.length<2)return;
-
-  const min=Math.min(...pts), max=Math.max(...pts), range=(max-min)||1;
-
-  let path='',fill='';
-  let maxDone=false,minDone=false;
-  let texts='';
-
+  const min=Math.min(...pts),max=Math.max(...pts),range=(max-min)||1;
+  let path='',fill='',texts='',maxDone=false,minDone=false;
   pts.forEach((val,i)=>{
     const x=(i/(pts.length-1))*w;
     const y=padTop+(1-(val-min)/range)*chartH;
     path+=(i===0?'M':'L')+x.toFixed(1)+','+y.toFixed(1);
-    if(i===0) fill = `M${x.toFixed(1)},${(padTop+chartH).toFixed(1)} L${x.toFixed(1)},${y.toFixed(1)}`;
-    else fill += ` L${x.toFixed(1)},${y.toFixed(1)}`;
-    if(val===max&&!maxDone){texts+=`<text x="${Math.max(4,Math.min(x-10,w-24))}" y="${Math.max(10,y-6)}" class="chart-tooltip">${Math.round(val)}°</text>`;maxDone=true;}
-    if(val===min&&!minDone){texts+=`<text x="${Math.max(4,Math.min(x-10,w-24))}" y="${Math.min(h-padBot-2,y+13)}" class="chart-tooltip">${Math.round(val)}°</text>`;minDone=true;}
+    fill+=(i===0?`M${x.toFixed(1)},${(padTop+chartH).toFixed(1)} L`:' L')+x.toFixed(1)+','+y.toFixed(1);
+    const tx=Math.max(4,Math.min(x-10,w-24));
+    if(val===max&&!maxDone){texts+=`<text x="${tx}" y="${Math.max(10,y-6)}" class="chart-tooltip">${Math.round(val)}°</text>`;maxDone=true;}
+    if(val===min&&!minDone&&min!==max){texts+=`<text x="${tx}" y="${Math.min(h-padBot-2,y+13)}" class="chart-tooltip">${Math.round(val)}°</text>`;minDone=true;}
   });
-  fill += ` L${w},${(padTop+chartH).toFixed(1)} Z`;
-
-  // Label jam bawah (4 titik)
-  const step = Math.max(1, Math.floor((pts.length-1)/3));
+  fill+=` L${w},${(padTop+chartH).toFixed(1)} Z`;
+  const step=Math.max(1,Math.floor((pts.length-1)/3));
   for(let i=0;i<pts.length;i+=step){
     const x=(i/(pts.length-1))*w;
-    const hh=new Date(times[i]).getHours().toString().padStart(2,'0');
-    const anchor = i===0 ? 'start' : (i>=pts.length-2 ? 'end' : 'middle');
-    const xAdj = i===0 ? x+2 : (i>=pts.length-2 ? x-2 : x);
-    texts += `<text x="${xAdj}" y="${h-2}" text-anchor="${anchor}" class="chart-hr">${hh}</text>`;
+    const hh=pad(new Date(times[i]).getHours());
+    const anchor=i===0?'start':(i>=pts.length-2?'end':'middle');
+    const xAdj=i===0?x+2:(i>=pts.length-2?x-2:x);
+    texts+=`<text x="${xAdj}" y="${h-2}" text-anchor="${anchor}" class="chart-hr">${hh}</text>`;
   }
-
-  // Titik akhir
-  const lastX=w, lastY=padTop+(1-(pts[pts.length-1]-min)/range)*chartH;
-
+  const lastY=padTop+(1-(pts[pts.length-1]-min)/range)*chartH;
   svg.innerHTML=`
-    <defs>
-      <linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="var(--accent-light)" stop-opacity="0.35"/>
-        <stop offset="100%" stop-color="var(--accent-light)" stop-opacity="0"/>
-      </linearGradient>
-    </defs>
+    <defs><linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+    </linearGradient></defs>
     <path d="${fill}" fill="url(#chartFill)" stroke="none"/>
-    <path d="${path}" fill="none" stroke="var(--accent-light)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-    <circle cx="${lastX}" cy="${lastY}" r="4" fill="var(--accent-light)"/>
-    ${texts}
-  `;
+    <path d="${path}" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="${w}" cy="${lastY}" r="4" fill="#38bdf8"/>
+    ${texts}`;
 }
 
-refreshDashboard();
-setInterval(refreshDashboard,REFRESH_SEC*1000);
-window.addEventListener('resize',()=>setTimeout(()=>{ if(window._lastHourly) renderChart(window._lastHourly); },500));
-
-// Simpan hourly untuk resize redraw
-const _origRender = renderChart;
-renderChart = function(h){ window._lastHourly = h; _origRender(h); };
-
 // ============ TICKERS ============
+function fillTicker(el,unit,speed){
+  if(!unit)return;
+  el.style.animation='none';
+  let reps=1;
+  el.innerHTML=unit;
+  const cw=el.parentElement.clientWidth;
+  while(el.scrollWidth<cw&&reps<30){reps++;el.innerHTML=unit.repeat(reps);}
+  el.innerHTML=unit.repeat(reps*2);
+  const half=el.scrollWidth/2;
+  el.style.animation='';
+  el.style.animationDuration=Math.max(12,half/speed)+'s';
+}
+function renderTickers(){
+  fillTicker($('tickerEco'),tickerUnits.eco,45);
+  fillTicker($('tickerNews'),tickerUnits.news,55);
+}
 async function updateTickers(){
   try{
     const[rUsd,rCrypto,rNews]=await Promise.all([
-      fetchT('https://open.er-api.com/v6/latest/USD',5000).then(r=>r.json()).catch(()=>null),
-      fetchT('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd',5000).then(r=>r.json()).catch(()=>null),
-      fetchT('https://api.rss2json.com/v1/api.json?rss_url=https://www.cnbcindonesia.com/news/rss',6000).then(r=>r.json()).catch(()=>null)
+      fetchT('https://open.er-api.com/v6/latest/USD',6000).then(r=>r.json()).catch(()=>null),
+      fetchT('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd',6000).then(r=>r.json()).catch(()=>null),
+      fetchT('https://api.rss2json.com/v1/api.json?rss_url=https://www.cnbcindonesia.com/news/rss',7000).then(r=>r.json()).catch(()=>null)
     ]);
-
-    const updTime = new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
-    let ecoHtml='';
-    const usd=(rUsd&&rUsd.rates&&rUsd.rates.IDR)?Math.round(rUsd.rates.IDR).toLocaleString('id-ID'):'15.800';
-    const btc=(rCrypto&&rCrypto.bitcoin)?rCrypto.bitcoin.usd.toLocaleString():'--';
-    const eth=(rCrypto&&rCrypto.ethereum)?rCrypto.ethereum.usd.toLocaleString():'--';
+    const old=store.get('dash_eco')||{};
+    const eco={
+      usd:(rUsd&&rUsd.rates&&rUsd.rates.IDR)?Math.round(rUsd.rates.IDR).toLocaleString('id-ID'):old.usd,
+      btc:(rCrypto&&rCrypto.bitcoin)?rCrypto.bitcoin.usd.toLocaleString('en-US'):old.btc,
+      eth:(rCrypto&&rCrypto.ethereum)?rCrypto.ethereum.usd.toLocaleString('en-US'):old.eth
+    };
+    store.set('dash_eco',eco);
+    const upd=new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
     const ecoData=[
-      {i:'🕒',l:'Update',v:updTime},
-      {i:'💵',l:'USD/IDR',v:'Rp'+usd},
-      {i:'₿',l:'BTC',v:'$'+btc},
-      {i:'⟠',l:'ETH',v:'$'+eth},
+      {i:'🕒',l:'Update',v:upd},
+      {i:'💵',l:'USD/IDR',v:eco.usd?'Rp'+eco.usd:'--'},
+      {i:'₿',l:'BTC',v:eco.btc?'$'+eco.btc:'--'},
+      {i:'⟠',l:'ETH',v:eco.eth?'$'+eco.eth:'--'},
       {i:'⛽',l:'Pertamax',v:'Rp12.100'},
       {i:'🛢️',l:'Pertalite',v:'Rp10.000'}
     ];
-    for(let i=0;i<4;i++){
-      ecoData.forEach(d=>{ecoHtml+=`<div class="t-item"><span style="font-size:14px">${d.i}</span><span style="color:var(--text-secondary)">${d.l}</span><span class="t-val">${d.v}</span></div>`;});
-    }
-    document.getElementById('tickerEco').innerHTML=ecoHtml;
+    tickerUnits.eco=ecoData.map(d=>`<div class="t-item"><span style="font-size:14px">${d.i}</span><span style="color:var(--text-secondary)">${d.l}</span><span class="t-val">${esc(d.v)}</span></div>`).join('');
 
-    let newsHtml='';
-    if(rNews&&rNews.items){
-      const topNews=rNews.items.slice(0,8);
-      for(let i=0;i<3;i++){
-        topNews.forEach(n=>{newsHtml+=`<div class="t-item"><span class="tk-news-tag">TERBARU</span><span style="font-weight:500">${n.title}</span></div>`;});
-      }
-      document.getElementById('tickerNews').innerHTML=newsHtml;
+    if(rNews&&rNews.items&&rNews.items.length){
+      tickerUnits.news=rNews.items.slice(0,8).map(n=>`<div class="t-item"><span class="tk-news-tag">TERBARU</span><span style="font-weight:500">${esc(n.title)}</span></div>`).join('');
+      store.set('dash_news',tickerUnits.news);
+    }else if(!tickerUnits.news){
+      tickerUnits.news=store.get('dash_news')||'<div class="t-item"><span style="color:var(--text-secondary)">Berita tidak tersedia saat ini</span></div>';
     }
+    renderTickers();
   }catch(e){console.warn('Ticker gagal:',e);}
 }
-updateTickers();
-setInterval(updateTickers,300000);
+['rowEco','rowNews'].forEach(id=>$(id).addEventListener('click',()=>$(id).classList.toggle('paused')));
 
-// Tap ticker untuk pause
-['rowEco','rowNews'].forEach(id=>{
-  const el=document.getElementById(id);
-  if(el) el.addEventListener('click',()=>el.classList.toggle('paused'));
-});
-
-// ============ AUTO UPDATE ============
+// ============ AUTO UPDATE (anti reload-loop) ============
 async function checkVersion(){
   try{
     const r=await fetch('version.txt?t='+Date.now(),{cache:'no-store'});
+    if(!r.ok)return;
     const v=(await r.text()).trim();
-    if(v&&!v.includes('<')&&v!==VERSION){location.reload();}
+    if(v&&!v.includes('<')&&v!==VERSION){
+      const n=+sessionStorage.getItem('dash_reload')||0;
+      if(n>=3)return;
+      sessionStorage.setItem('dash_reload',n+1);
+      if('serviceWorker' in navigator){
+        const reg=await navigator.serviceWorker.getRegistration();
+        if(reg)await reg.update();
+      }
+      setTimeout(()=>location.reload(),1500);
+    }else sessionStorage.removeItem('dash_reload');
   }catch(e){}
 }
 setInterval(checkVersion,30000);
 
-// ============ SCREEN WAKE LOCK ============
-let wakeLock = null;
-let wakeLockWanted = true;
-
-async function requestWakeLock(){
-  if(!('wakeLock' in navigator)) return;
-  if(!wakeLockWanted) return;
-  try{
-    wakeLock = await navigator.wakeLock.request('screen');
-    wakeLock.addEventListener('release', () => {
-      // Browser lepas otomatis (misal tab jadi background)
-      wakeLock = null;
-    });
-  }catch(e){
-    console.warn('Wake Lock gagal:', e);
-  }
+// ============ WAKE LOCK ============
+let wakeLock=null;
+function updateWakeIndicator(on){
+  $('liveDot').style.background=on?'var(--success)':'var(--danger)';
+  $('liveDot').parentElement.title=on?'Layar tetap menyala: aktif':'Layar tetap menyala: tidak aktif';
 }
-
-// Minta wake lock saat pertama load (perlu interaksi user di beberapa browser)
+async function requestWakeLock(){
+  if(!('wakeLock' in navigator)||wakeLock)return;
+  try{
+    wakeLock=await navigator.wakeLock.request('screen');
+    updateWakeIndicator(true);
+    wakeLock.addEventListener('release',()=>{wakeLock=null;updateWakeIndicator(false);});
+  }catch(e){updateWakeIndicator(false);}
+}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')requestWakeLock();});
+['click','touchstart','keydown'].forEach(ev=>document.addEventListener(ev,function f(){
+  requestWakeLock();
+  ['click','touchstart','keydown'].forEach(e2=>document.removeEventListener(e2,f));
+},{passive:true}));
 requestWakeLock();
 
-// Re-acquire ketika tab kembali visible
-document.addEventListener('visibilitychange', () => {
-  if(document.visibilityState === 'visible') requestWakeLock();
-});
-
-// Wake lock pertama butuh gesture user di Chrome Android.
-// Pasang sekali di gesture pertama (tap/klik/scroll).
-function firstGesture(){
-  requestWakeLock();
-  document.removeEventListener('click', firstGesture);
-  document.removeEventListener('touchstart', firstGesture);
-  document.removeEventListener('keydown', firstGesture);
-}
-document.addEventListener('click', firstGesture, {once:true});
-document.addEventListener('touchstart', firstGesture, {once:true, passive:true});
-document.addEventListener('keydown', firstGesture, {once:true});
-
-// Toggle indikator visual (kalau perlu, nanti bisa dipasang ke badge)
-function updateWakeIndicator(on){
-  const dot = document.querySelector('.badge-live .dot');
-  if(dot) dot.style.background = on ? 'var(--success)' : 'var(--danger)';
+// ============ FULLSCREEN ============
+const fsBtn=$('fsBtn');
+if(document.documentElement.requestFullscreen){
+  fsBtn.hidden=false;
+  fsBtn.addEventListener('click',()=>{
+    if(document.fullscreenElement)document.exitFullscreen();
+    else document.documentElement.requestFullscreen().catch(()=>{});
+  });
 }
 
+// ============ EVENTS ============
+$('countdown').addEventListener('click',forceRefresh);
+$('retryBtn').addEventListener('click',forceRefresh);
+window.addEventListener('online',()=>{refreshDashboard();updateTickers();});
+window.addEventListener('offline',()=>showError('Offline. Menampilkan data terakhir.'));
+let rz;
+window.addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>{if(window._lastHourly)renderChart(window._lastHourly);renderTickers();},300);});
+
+// ============ INIT ============
+const last=store.get('dash_last');
+if(last&&last.w&&last.w.current){
+  try{
+    placeName=last.place;
+    $('loc').textContent=last.place+(last.fallback?' (default)':'');
+    renderWeather(last.w,last.aq);
+    $('main').classList.add('stale');
+  }catch(e){}
+}
+tickerUnits.news=store.get('dash_news')||'';
+refreshDashboard();
+setInterval(refreshDashboard,REFRESH_SEC*1000);
+updateTickers();
+setInterval(updateTickers,300000);
 </script>
 </body>
 </html>

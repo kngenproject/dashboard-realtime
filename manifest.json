@@ -2,7 +2,7 @@
   "name": "Dashboard Pemantauan Realtime",
   "short_name": "Dashboard",
   "description": "Cuaca, AQI, ekonomi, kalender, berita realtime",
-  "start_url": "./?v=6.3.1",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",

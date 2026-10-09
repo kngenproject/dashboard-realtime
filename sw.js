@@ -1,11 +1,11 @@
-const VERSION='6.3.1';
+const VERSION='6.4.0';
 const CACHE='dash-v'+VERSION;
 const ASSETS=['./','index.html','manifest.json','icon-192.png','icon-512.png'];
 
 self.addEventListener('install',e=>{
   e.waitUntil(
     caches.open(CACHE)
-      .then(c=>c.addAll(ASSETS).catch(()=>null))
+      .then(c=>Promise.allSettled(ASSETS.map(a=>c.add(a))))
       .then(()=>self.skipWaiting())
   );
 });
@@ -26,18 +26,21 @@ self.addEventListener('fetch',e=>{
 
   if(e.request.mode==='navigate'){
     e.respondWith(
-      caches.match('index.html').then(r=>r||fetch(e.request))
+      fetch(e.request).then(res=>{
+        if(res.ok){const cp=res.clone();caches.open(CACHE).then(c=>c.put('index.html',cp));}
+        return res;
+      }).catch(()=>caches.match('index.html',{ignoreSearch:true}))
     );
     return;
   }
 
   e.respondWith(
-    caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{
-      if(res.ok){
-        const cp=res.clone();
-        caches.open(CACHE).then(c=>c.put(e.request,cp));
-      }
-      return res;
-    }))
+    caches.match(e.request,{ignoreSearch:true}).then(cached=>{
+      const net=fetch(e.request).then(res=>{
+        if(res.ok){const cp=res.clone();caches.open(CACHE).then(c=>c.put(e.request,cp));}
+        return res;
+      }).catch(()=>cached);
+      return cached||net;
+    })
   );
 });
